@@ -4,7 +4,8 @@ var cors = require('cors');
 var bodyparser = require('body-parser');
 
 var app = express();
-const PORT = 3000;
+// Use the environment variable or use a given port
+const PORT = process.env.PORT || 3000;
 
 const route = require('./route/routes.js');
 
