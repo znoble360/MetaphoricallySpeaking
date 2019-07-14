@@ -15,12 +15,8 @@ password: {
     required: true
 },
 
-date: {
-    type: String,
-    default: Date.now
-},
 
+}); 
 
-});
-
-const User =mongoose.model('User', UserSchema) = module.exports
+const User = mongoose.model('User', UserSchema)
+module.exports = User;
