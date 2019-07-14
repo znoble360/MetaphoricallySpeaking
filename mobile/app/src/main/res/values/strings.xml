@@ -9,6 +9,17 @@
     <string name="password">Password</string>
 
     // temp list
+
+    <string-array name="results">
+        <item>It\'s raining cats and dogs</item>
+        <item>I\'m on fire</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>It is raining a lot</item>
+        <item>I am really doing well</item>
+    </string-array>
+
     <string name="result">It\'s raining cats and dogs</string>
     <string name="resultDiscription">It is raining a lot</string>
 
