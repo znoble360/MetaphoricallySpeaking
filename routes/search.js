@@ -6,10 +6,10 @@ const express = require('express');
 const router = express.Router();
 
 //gets metaphor model
-const Metaphor = require('..models/metaphor');
+const Metaphor = require('../models/metaphor');
 
 
-function search(request, response){
+var search = function (request, response){
 	//gets string from request
 	const {searchString} = request.body;
 	var returnArray = [];
@@ -22,7 +22,7 @@ function search(request, response){
 		var i;
 		for(i = 0; i < documents.length; i++){
 			
-			if (documents[i].includes(searchString)){
+			if (documents[i].text.includes(searchString)){
 				returnArray.push(documents[i]);
 			}
 		}
@@ -34,3 +34,5 @@ function search(request, response){
 
 
 router.get('/search', search);
+
+module.exports = router;
