@@ -1,6 +1,6 @@
 
 //This module implements add-delete of posts
-
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
