@@ -10,9 +10,16 @@ const app = express();
 
 require('./config/passport')(passport);
 //connect to mongo
+
 mongooose.connect(db, {useNewUrlParser: true})
 .then(()=>console.log("Mongo db connected"))
 .catch(err=> console.log(err));
+
+/*
+mongooose.connect('mongodb://localhost:27017/fcc-test', {useNewUrlParser: true})
+.then(()=>console.log("Mongo db connected"))
+.catch(err=> console.log("We had an error connecting to the database: " + err));
+*/
 
 //EJS
 app.use(expressLayouts);
