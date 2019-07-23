@@ -38,6 +38,5 @@ var search = function (request, response){
 
 router.get('/search', search);
 
-
 module.exports = router;
 
