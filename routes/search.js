@@ -11,11 +11,11 @@ const Metaphor = require('../models/metaphor');
 
 var search = function (request, response){
 	//gets string from request
-	const {searchString} = request.body;
+	const searchString = request.query.searchString;
 	var returnArray = [];
 	
 	//gets all of the metaphors in database, puts them in an array, then does a function
-	Metaphor.find({}).toArray(function (err, documents){
+	Metaphor.find({}).exec(function (err, documents){
 		
 		//goes through all of the metaphors. If a metaphor contains the search query,
 		//it gets pushed to an array
@@ -26,13 +26,17 @@ var search = function (request, response){
 				returnArray.push(documents[i]);
 			}
 		}
+		
+		//sends a JSON object with the array of results.
+		console.log("The return array for the search function is:" + returnArray);
+		response.send({searchResults : returnArray});
 	});
 	
-	//sends a JSON object with the array of results.
-	response.send({searchResults : returnArray});
+
 }
 
 
 router.get('/search', search);
 
 module.exports = router;
+
