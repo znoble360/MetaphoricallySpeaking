@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const user = require('../routes/users');
 
 //gets metaphor model
 const Metaphor = require('../models/metaphor');
@@ -33,8 +34,10 @@ router.post('/add', (req,res,next)=>{
     // route parameters: req.params
 
   	let metaphor = new Metaphor( {
-    	text: req.body.text,
-      	explanation: req.body.explanation
+    	  text: req.body.text,
+        explanation: req.body.explanation
+        
+        
     } );
 
   	// After you create/get an object using the model, you must call the model's methods to actually interact with the database
