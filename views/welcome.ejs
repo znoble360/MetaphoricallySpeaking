@@ -1,28 +1,26 @@
-<nav class="navbar navbar-expand-md fixed-top bg-light">
-  <div class="container">
-    <div class="col-md-4">
-      <h3 class="text-left"><a class="text-primary" style="text-decoration: none" href="/">Metaphorically Speaking</a></h1>
-    </div>
-
-    <div class="col-md-4 d-flex" id="navbarSupportedContent">
-        <form action="" class="form-inline my-2 my-lg-0 mx-auto">
-          <input class="form-control" style="width: 200px" type="search" placeholder="Search for a metaphor">
-          <button class="btn btn-outline-primary my-2 my-sm-0 ml-sm-2" type="submit">Search</button>
-        </form>
-    </div>
-    
-    <div class="col-md-4 d-flex">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item px-2">
-          <a class="btn btn-primary btn-block mb-2" href="/users/register">Sign Up<span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item px-2">
-          <a class="btn btn-secondary btn-block" href="/users/login">Login</a>
-      </ul>
-    </div>
-  </div> <!-- container -->
-</nav> <!-- navbar -->
+<% include ./partial/navbar-logged-out %>
 
 <div class="container">
-  <p class="new-class-test">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa fugit reprehenderit quos nobis nostrum enim neque labore id doloribus. Nemo architecto iusto ipsam distinctio temporibus sunt molestias tempore culpa similique.</p>
+  <div class="row">
+    <div class="col-md-2">
+      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa fugit reprehenderit quos nobis nostrum enim neque labore id doloribus. Nemo architecto iusto ipsam distinctio temporibus sunt molestias tempore culpa similique.</p>
+    </div>
+    <div class="col-md-8">
+      <% include ./partial/messages %>
+      <div id="metaphor-container">
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+        <% include ./partial/metaphor-template %>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa fugit reprehenderit quos nobis nostrum enim neque labore id doloribus. Nemo architecto iusto ipsam distinctio temporibus sunt molestias tempore culpa similique.</p>
+    </div>
+  </div>
 </div>
