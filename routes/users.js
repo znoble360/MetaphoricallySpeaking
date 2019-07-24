@@ -83,7 +83,7 @@ router.post('/register', (req,res,next)=>{
                     //save user
                     newUser.save()
                     .then(user =>{
-                        console.log("yes");
+                        
                         req.flash('success_msg', 'You have successfully created an account');
                         res.redirect('./login');
                     })
