@@ -2,3 +2,68 @@ body
 {
     padding-top: 100px;
 }
+
+.btn-vote
+{
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background: none;
+    background-size: 100%;
+}
+
+.btn-vote:focus
+{
+    outline: none;
+}
+
+.metaphor-default .btn-like
+{
+    background-image: url(../images/upvote-default.png);
+}
+
+.metaphor-default .btn-dislike
+{
+    background-image: url(../images/downvote-default.png);
+}
+
+.metaphor-liked .btn-like
+{
+    background-image: url(../images/upvote-selected.png);
+}
+
+.metaphor-liked .btn-dislike
+{
+    background-image: url(../images/downvote-default.png);
+}
+
+.metaphor-disliked .btn-like
+{
+    background-image: url(../images/upvote-default.png);
+}
+
+.metaphor-disliked .btn-dislike
+{
+    background-image: url(../images/downvote-selected.png);
+}
+
+.metaphor-footer
+{
+    height: 44px;
+}
+
+.btn-metaphor-menu
+{
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background: none;
+    background-size: 100%;
+    background-image: url(../images/more-options-gray.png);
+}
+
+
+.btn-metaphor-menu:focus
+{
+    outline: none;
+}

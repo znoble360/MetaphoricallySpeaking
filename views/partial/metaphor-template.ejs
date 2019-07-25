@@ -1,9 +1,38 @@
-<div class="card text-center mb-5">
-    <div class="card-body">
-        <h3 class="card-title text-left">"Metapor will go here"</h3>
-        <p class="card-text text-left">This is where the explanation of the metaphor will go once I learn more about templating.</p>
+<% metaphor.forEach((meta)=>{ %>
+    <div class="metaphor-default">
+        <div class="card mb-5">
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-11">
+                        <h3 class="card-title text-left">"<%= meta.text %>"</h3>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="dropdown">
+                            <button type="button" class="btn-metaphor-menu" data-toggle="dropdown">
+                            </button>
+                            <div class="dropdown-menu p-0">
+                                <a class="dropdown-item" href="#">Report</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+
+                <p class="card-text text-left"><%= meta.explanation %></p>
+                      
+            </div>
+            <div class="card-footer d-flex metaphor-footer">
+                <span class="text-muted mr-auto d-flex">
+                    <button class="btn-vote btn-like px-0" id="like-btn"></button>
+                    <%= meta.num_likes %>
+                    <button class="btn-vote btn-dislike px-0 ml-2" id="dislike-btn"></button>
+                    <%= meta.num_dislikes %>
+                </span>
+                <span class="text-muted ml-auto">Posted <%= meta.time_string %> by <a href="#"><%= meta.author %></a></span>
+            </div>
+        </div>
     </div>
-    <div class="card-footer text-muted">
-      <span class="text-right">Posted 2 days ago by <a href="#">author</a></span>
-    </div>
-</div>
+<% }); %>
