@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const user = require('../routes/users');
+//const user = require('../routes/users');
+const user = require('../models/user');
 
 //gets metaphor model
 const Metaphor = require('../models/metaphor');
