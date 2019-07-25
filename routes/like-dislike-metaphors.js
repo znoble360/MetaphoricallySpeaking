@@ -71,12 +71,14 @@ router.put('/dislike/:metaphorId/:userId', (req,res,next)=>{
         let metaphor = records[0];
 
         if( metaphor.dislikedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == false ){
-        	metaphor.dislikedBy.push( mongoose.Types.ObjectId( req.params.userId ) );
+          metaphor.dislikedBy.push( mongoose.Types.ObjectId( req.params.userId ) );
+          metaphor.dislikeCount++;
         }
 
         if( metaphor.likedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == true ){
         	let index = metaphor.likedBy.indexOf( mongoose.Types.ObjectId( req.params.userId ) );
-          	metaphor.likedBy.splice( index, 1 );
+            metaphor.likedBy.splice( index, 1 );
+            metaphor.likeCount--;
         }
 
         metaphor.save( function( error ){
