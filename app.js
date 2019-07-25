@@ -63,5 +63,6 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/metaphors', require('./routes/add-delete-metaphors'));
 app.use('/metaphors', require('./routes/like-dislike-metaphors'));
+app.use('/metaphors', require('./routes/display'));
 app.use('/search', require('./routes/search'));
 app.use(express.static(__dirname + '/views'));
