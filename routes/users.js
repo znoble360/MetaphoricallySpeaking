@@ -20,7 +20,7 @@ router.post('/register', (req,res,next)=>{
 
     if(!name || !email || !password || !password2){
 
-        errors.push({msg: "fill in all fields"});
+        errors.push({msg: "Please fill in all fields"});
     }
 
     //check to see if passwords match
