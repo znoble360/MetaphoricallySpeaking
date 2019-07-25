@@ -23,12 +23,14 @@ router.put('/like/:metaphorId/:userId', (req,res,next)=>{
         let metaphor = records[0];
 
         if( metaphor.likedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == false ){
-        	metaphor.likedBy.push( mongoose.Types.ObjectId( req.params.userId ) );
+          metaphor.likedBy.push( mongoose.Types.ObjectId( req.params.userId ) );
+          metaphor.likeCount++;
         }
 
         if( metaphor.dislikedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == true ){
         	let index = metaphor.dislikedBy.indexOf( mongoose.Types.ObjectId( req.params.userId ) );
-          	metaphor.dislikedBy.splice( index, 1 );
+            metaphor.dislikedBy.splice( index, 1 );
+            metaphor.dislikeCount --;
         }
 
         metaphor.save( function( error ){
