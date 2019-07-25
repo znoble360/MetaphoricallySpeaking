@@ -51,3 +51,19 @@ body
 {
     height: 44px;
 }
+
+.btn-metaphor-menu
+{
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background: none;
+    background-size: 100%;
+    background-image: url(../images/more-options-gray.png);
+}
+
+
+.btn-metaphor-menu:focus
+{
+    outline: none;
+}
