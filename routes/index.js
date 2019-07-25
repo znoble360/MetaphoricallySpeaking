@@ -12,7 +12,8 @@ router.get('/', (req,res)=> res.render("welcome", {metaphor :
 router.get('/dashboard',(ensureAuthenticated), (req,res)=> 
 
 res.render("dashboard", {
-    name: req.user.name, metaphor : [{text : "It's raining cats and dogs.", 
+    name: req.user.name, id: req.user._id,
+    metaphor : [{text : "It's raining cats and dogs.", 
     explanation : "It is raining hard.", author : "metaphor_guy", 
     num_likes : "130", num_dislikes : "14", time_string : "3 days ago"}, 
     {text : "Cry me a river.", explanation : "You are overreacting.", 

@@ -8,7 +8,8 @@ let MetaphorSchema = new mongoose.Schema( {
   dislikedBy: { type: [mongoose.Schema.Types.ObjectId] },
   likeCount: {type: Number },
   dislikeCount: { type: Number },
-  date: { type: Date }
+  date: { type: Date },
+  
 } );
 
 const MetaphorModel = mongoose.model('Metaphor', MetaphorSchema)
