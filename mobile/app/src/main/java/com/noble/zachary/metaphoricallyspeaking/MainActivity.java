@@ -9,10 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -20,11 +26,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Button searchActivityBtn = findViewById(R.id.searchBtn);
-        searchActivityBtn.setOnClickListener(new View.OnClickListener()
+	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.activity_main);
+
+	    Button searchActivityBtn = findViewById(R.id.searchBtn);
+	    searchActivityBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -35,18 +42,22 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Button toastTest = findViewById(R.id.toast_test);
-        toastTest.setOnClickListener(new View.OnClickListener()
+	    Button toastTest = findViewById(R.id.toast_test);
+	    toastTest.setOnClickListener(new View.OnClickListener()
         {
 	        @Override
 	        public void onClick(View view)
 	        {
-		        Toast.makeText(MainActivity.this, "toast test", Toast.LENGTH_SHORT).show();
+
+		        //String response;
+
+
+		        //Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
 	        }
         });
 
-        Button avOn = findViewById(R.id.av_on);
-        avOn.setOnClickListener(new View.OnClickListener()
+	    Button avOn = findViewById(R.id.av_on);
+	    avOn.setOnClickListener(new View.OnClickListener()
         {
 	        @Override
 	        public void onClick(View view)
@@ -73,7 +84,8 @@ public class MainActivity extends AppCompatActivity
 		    @Override
 		    public void onClick(View view)
 		    {
-			    String pc_off = "https://maker.ifttt.com/trigger/pc_off/with/key/bGaHY_dey0UzIxiHK6MKcE";
+			    // String pc_off = "https://maker.ifttt.com/trigger/pc_off/with/key/bGaHY_dey0UzIxiHK6MKcE";
+			    String pc_off = "https://metaphorically-speaking.herokuapp.com/search/search?searchString=test";
 			    String response;
 
 			    try
@@ -85,11 +97,9 @@ public class MainActivity extends AppCompatActivity
 			    	Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 			    }
 
-
 		    }
 	    });
     }
-
 
 }
 
@@ -104,8 +114,8 @@ class HttpRequests extends AsyncTask<String, Void, String>
 
 	private static String makeHttpPostRequest(String httpAddress)
 	{
-		String response;
-		// InputStream inStream;
+		String response= "";
+		InputStream inStream;
 
 		try
 		{
@@ -113,18 +123,37 @@ class HttpRequests extends AsyncTask<String, Void, String>
 			HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 			urlConn.setConnectTimeout(5000);
 			urlConn.setReadTimeout(2500);
-			urlConn.setRequestMethod("POST");
+			urlConn.setRequestMethod("GET");
 			urlConn.setDoInput(true);
 
 			urlConn.connect();
 
-			response = urlConn.getResponseMessage();
+			inStream = urlConn.getInputStream();
 
-			// inStream = urlConn.getResponseMessage();
+			Scanner scanner = new Scanner(inStream);
+			while(scanner.hasNext())
+			{
+				response += scanner.nextLine();
+			}
 
-			// response = inStream.toString();
+			try
+			{
+				String metaphors = "";
+				JSONObject reader = new JSONObject(response);
+				JSONArray results = reader.getJSONArray("searchResults");
 
-			return response;
+				for(int i = 0; i < results.length(); i++)
+				{
+					JSONObject result = results.getJSONObject(i);
+					metaphors += (result.get("text") + ", ");
+				}
+				return metaphors;
+
+			} catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+
 
 		} catch (MalformedURLException e)
 		{

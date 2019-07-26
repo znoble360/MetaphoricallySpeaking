@@ -5,11 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 public class Results extends AppCompatActivity
 {
 
-    ListView resultsList;
+    ScrollView resultsList;
     String [] result, resultDescription;
 
 
@@ -20,10 +21,10 @@ public class Results extends AppCompatActivity
         setContentView(R.layout.activity_results);
 
         Resources res = getResources();
-        resultsList = (ListView) findViewById(R.id.resultsList);
+        resultsList = (ScrollView) findViewById(R.id.resultsList);
 
-        result = res.getStringArray(R.array.results);
-        resultDescription = res.getStringArray(R.array.descriptions);
+        //result = res.getStringArray(R.array.results);
+        //resultDescription = res.getStringArray(R.array.descriptions);
 
     }
 }
