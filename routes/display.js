@@ -14,6 +14,8 @@ router.get('/display',(req,res,next)=>{
         else{ 
            res.send(documents);
     }
+    resultArray = documents;
+    console.log(resultArray);
 });
 });
 
