@@ -13,6 +13,7 @@ public class MetaphorAdapter extends RecyclerView.Adapter<MetaphorAdapter.Metaph
 {
 	private ArrayList<MetaphorItem> mMetaphorList;
 
+	// saves the ui elements to be modified
 	public static class MetaphorViewHolder extends RecyclerView.ViewHolder
 	{
 		public TextView mMetaphorTextView;
@@ -26,11 +27,13 @@ public class MetaphorAdapter extends RecyclerView.Adapter<MetaphorAdapter.Metaph
 		}
 	}
 
+	// sets the metaphor list
 	public MetaphorAdapter(ArrayList<MetaphorItem> MetaphorList)
 	{
 		mMetaphorList = MetaphorList;
 	}
 
+	// metaphorViewHolder constructor
 	@Override
 	public MetaphorViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
 	{
@@ -39,6 +42,7 @@ public class MetaphorAdapter extends RecyclerView.Adapter<MetaphorAdapter.Metaph
 		return mvh;
 	}
 
+	// sets the textViews for the metaphorItem
 	@Override
 	public void onBindViewHolder(MetaphorViewHolder holder, int position)
 	{
@@ -48,6 +52,7 @@ public class MetaphorAdapter extends RecyclerView.Adapter<MetaphorAdapter.Metaph
 		holder.mDescriptionTextView.setText(currentItem.getDescription());
 	}
 
+	// returns the number of metaphors in the list
 	@Override
 	public int getItemCount()
 	{
