@@ -3,11 +3,17 @@ package com.noble.zachary.metaphoricallyspeaking;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -18,18 +24,50 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity
 {
+	EditText searchInput;
+	private RecyclerView resultsView;
+	private RecyclerView.Adapter mAdapter;
+	private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_main);
 
+	    searchInput = findViewById(R.id.searchField);
+	    resultsView = findViewById(R.id.resultsView);
+
+	    Button searchBtn = findViewById(R.id.searchBtn);
+	    searchBtn.setOnClickListener(new View.OnClickListener()
+	    {
+		    @Override
+		    public void onClick(View view)
+		    {
+		    	String searchString = searchInput.getText().toString();
+
+			    String search_url = getString(R.string.url_base) + getString(R.string.search) + searchString;
+			    String response;
+
+			    try
+			    {
+				    response = new HttpRequests().execute(search_url).get();
+					displayResults(response);
+			    }
+			    catch (Exception e)
+			    {
+			    	Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+			    }
+
+		    }
+	    });
+
+	    /*
 	    Button searchActivityBtn = findViewById(R.id.searchBtn);
 	    searchActivityBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -41,64 +79,39 @@ public class MainActivity extends AppCompatActivity
                 startActivity(startIntent);
             }
         });
+        */
+    }
 
-	    Button toastTest = findViewById(R.id.toast_test);
-	    toastTest.setOnClickListener(new View.OnClickListener()
-        {
-	        @Override
-	        public void onClick(View view)
-	        {
-
-		        //String response;
-
-
-		        //Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-	        }
-        });
-
-	    Button avOn = findViewById(R.id.av_on);
-	    avOn.setOnClickListener(new View.OnClickListener()
-        {
-	        @Override
-	        public void onClick(View view)
-	        {
-		        String pc_on = "https://maker.ifttt.com/trigger/pc_on/with/key/bGaHY_dey0UzIxiHK6MKcE";
-		        String response;
-
-		        try
-		        {
-			        response = new HttpRequests().execute(pc_on).get();
-			        Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-		        } catch (Exception e)
-		        {
-			        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-		        }
-
-
-	        }
-        });
-
-	    Button avOff = findViewById(R.id.av_off);
-	    avOff.setOnClickListener(new View.OnClickListener()
+    void displayResults(String results)
+    {
+	    try
 	    {
-		    @Override
-		    public void onClick(View view)
+		    JSONObject reader = new JSONObject(results);
+		    JSONArray JSONResults = reader.getJSONArray("searchResults");
+		    ArrayList<MetaphorItem> metaphorList = new ArrayList<>();
+
+		    for(int i = 0; i < JSONResults.length(); i++)
 		    {
-			    // String pc_off = "https://maker.ifttt.com/trigger/pc_off/with/key/bGaHY_dey0UzIxiHK6MKcE";
-			    String pc_off = "https://metaphorically-speaking.herokuapp.com/search/search?searchString=test";
-			    String response;
+			    JSONObject result = JSONResults.getJSONObject(i);
+			    String metaphor = result.getString("text");
+			    String description = result.getString("explanation");
 
-			    try
-			    {
-				    response = new HttpRequests().execute(pc_off).get();
-					Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-			    } catch (Exception e)
-			    {
-			    	Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-			    }
-
+			    metaphorList.add(new MetaphorItem(metaphor, description));
 		    }
-	    });
+
+		    resultsView = findViewById(R.id.resultsView);
+		    resultsView.setHasFixedSize(true);
+		    mLayoutManager = new LinearLayoutManager(this);
+		    mAdapter = new MetaphorAdapter(metaphorList);
+
+		    resultsView.setLayoutManager(mLayoutManager);
+		    resultsView.setAdapter(mAdapter);
+
+	    }
+	    catch (JSONException e)
+	    {
+		    e.printStackTrace();
+	    }
     }
 
 }
@@ -109,12 +122,12 @@ class HttpRequests extends AsyncTask<String, Void, String>
 	@Override
 	protected String doInBackground(String... urls)
 	{
-		return makeHttpPostRequest(urls[0]);
+		return makeHttpGetRequest(urls[0]);
 	}
 
-	private static String makeHttpPostRequest(String httpAddress)
+	private static String makeHttpGetRequest(String httpAddress)
 	{
-		String response= "";
+		String response = "";
 		InputStream inStream;
 
 		try
@@ -136,29 +149,14 @@ class HttpRequests extends AsyncTask<String, Void, String>
 				response += scanner.nextLine();
 			}
 
-			try
-			{
-				String metaphors = "";
-				JSONObject reader = new JSONObject(response);
-				JSONArray results = reader.getJSONArray("searchResults");
+			return response;
 
-				for(int i = 0; i < results.length(); i++)
-				{
-					JSONObject result = results.getJSONObject(i);
-					metaphors += (result.get("text") + ", ");
-				}
-				return metaphors;
-
-			} catch (JSONException e)
-			{
-				e.printStackTrace();
-			}
-
-
-		} catch (MalformedURLException e)
+		}
+		catch (MalformedURLException e)
 		{
 			System.out.println("URL error: " + e.getMessage());
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			System.out.println("Download failed: " + e.getMessage());
 		}
