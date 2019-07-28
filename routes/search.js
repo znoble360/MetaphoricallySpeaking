@@ -33,9 +33,6 @@ var search = function (request, response){
 		response.send({searchResults : returnArray});
 	});
 	
-<<<<<<< Updated upstream
-
-=======
 }
 
 //A new and improved search function that should work in O(1) time, 
@@ -92,11 +89,10 @@ betterSearch = function (request, response){
 		
 		});
 	});
->>>>>>> Stashed changes
 }
 
 
-router.get('/search', search);
+router.get('/search', betterSearch);
 
 module.exports = router;
 
