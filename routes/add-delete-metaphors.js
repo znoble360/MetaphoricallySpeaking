@@ -37,7 +37,7 @@ router.post('/add', (req,res,next)=>{
   	let metaphor = new Metaphor( {
     	  text: req.body.text,
         explanation: req.body.explanation,
-        id: req.user.id
+        
     } );
 
   	// After you create/get an object using the model, you must call the model's methods to actually interact with the database
@@ -50,7 +50,7 @@ router.post('/add', (req,res,next)=>{
         res.send( error );
       } else {
         console.log( "Metaphor created successfully!" );
-        res.send( "Metaphor created successfully!" );
+      
       }
 
     } );
