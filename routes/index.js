@@ -26,14 +26,15 @@ const metaphor2 = {
     time_string: "12/2/18 at 11:30"
 }
 
-const metaphors = [metaphor1, metaphor2];
-const metaphors2 = [];
+const metaphors2 = [metaphor1, metaphor2];
 
 //welcome page
 router.get('/', (req,res)=> res.render("welcome", {
     page: "welcome",
     id: null,
-    metaphor: metaphors
+    name: null,
+    email: null,
+    metaphor: metaphors2
 }));
 
 router.get('/please-log-in', (req,res)=> {
@@ -42,48 +43,41 @@ router.get('/please-log-in', (req,res)=> {
 });
 
 
-router.get('/dashboard',(ensureAuthenticated), (req,res)=> 
+router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
 
-res.render("dashboard", {
+    console.log("dash id: " + req.user._id);
+
+    res.render("dashboard", {
     page: "dashboard",
     name: req.user.name,
     id: req.user._id,
     email: req.user.email,
-    metaphor: metaphors
-}));
+    metaphor: metaphors2
+})});
 
-router.get('/myprofile', (ensureAuthenticated), (req,res)=>
+router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
 
-res.render("myprofile", {
+    console.log("myprof id: " + req.user._id);
+
+    res.render("myprofile", {
     page: "myprofile",
     name: req.user.name,
     id: req.user._id,
     email: req.user.email,
-    metaphor: metaphors,
+    metaphor: metaphors2,
     display: "posts"
-}));
+})});
 
-router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=>
+router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
 
-res.render("myprofile", {
+    res.render("myprofile", {
     page: "myprofile",
     name: req.user.name,
     id: req.user._id,
     email: req.user.email,
-    metaphor: metaphors,
+    metaphor: metaphors2,
     display: "likes"
-}));
-
-router.get('/searchresults', (ensureAuthenticated), (req,res)=>
-
-res.render("searchresults", {
-    page: "searchresults",
-    name: req.user.name,
-    id: req.user._id,
-    email: req.user.email,
-    metaphor: metaphors
-}));
-
+})});
 
 
 module.exports = router;
