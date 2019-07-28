@@ -20,6 +20,7 @@ var search = function (request, response){
 		//goes through all of the metaphors. If a metaphor contains the search query,
 		//it gets pushed to an array
 		var i;
+		
 		for(i = 0; i < documents.length; i++){
 			
 			if (documents[i].text.includes(searchString)){
@@ -32,11 +33,49 @@ var search = function (request, response){
 		response.send({searchResults : returnArray});
 	});
 	
+}
+
+//A new and improved search function that should work in O(1) time, 
+//because it directly queries what we need.
+
+//It returns the results sorted by likes in descending order, and can also 
+//find a metaphor by unique ID
+
+betterSearch = function (request, response){
+	//gets string from request
+	const searchString = request.query.searchString;
+	
+	var returnArray = [];
+	
+	//uses a regular expression shortcut to query exactly what we need, and saves it in an array
+	//also specifies that the result must be sorted by likeCount
+	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, documents){
+		
+		//sets the result of the query to a return variable
+
+		returnArray.push(documents);
+		
+		//if a post ID was input, it will find that and push it onto the return array
+		Metaphor.find({_id: searchString}).exec(function (err, documents2){
+		
+			returnArray.push(documents2);
+			
+			//sends a JSON object with the array of results, labeled searchResults.
+			console.log("The return array for the search function is:" + returnArray);
+			response.send({searchResults : returnArray});
+		
+		});
+	
+		
+	});
+	
+
+
 
 }
 
 
-router.get('/search', search);
+router.get('/search', betterSearch);
 
 module.exports = router;
 
