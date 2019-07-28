@@ -20,10 +20,16 @@ $("#search-form").submit( (e)=> {
     console.log(window.location.href);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/search/search?searchString=" + searchString, false);
-    xhr.send(null);
-    console.log("response" + xhr.responseText);
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("response: " + xhr.responseText);
+        }
+    };
+    xhr.open("GET", "/search/search?searchString=" + searchString, true);
+    xhr.send();
 });
+
+
 
 function report()
 {
