@@ -57,8 +57,9 @@ betterSearch = function (request, response){
 		
 		//if a post ID was input, it will find that and push it onto the return array
 		Metaphor.find({_id: searchString}).exec(function (err, documents2){
-		
-			returnArray.push(documents2);
+			if(documents2 != null){
+				returnArray.push(documents2);
+			}
 			
 			//sends a JSON object with the array of results, labeled searchResults.
 			console.log("The return array for the search function is:" + returnArray);
