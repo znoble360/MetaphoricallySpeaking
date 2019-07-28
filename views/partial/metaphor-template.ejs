@@ -1,5 +1,9 @@
+<% if (metaphor.length <= 0) { %>
+    <h4 class="text-center">Looks like there are no posts yet :(</h2>
+<% } %>
+
 <% metaphor.forEach((meta)=>{ %>
-    <div class="metaphor-default">
+    <%- "<div class="%>metaphor-default<%-" id="%> <%= meta.id %> <%-">" %>
         <div class="card mb-5">
             <div class="card-body">
 
@@ -13,7 +17,17 @@
                             <button type="button" class="btn-metaphor-menu" data-toggle="dropdown">
                             </button>
                             <div class="dropdown-menu p-0">
-                                <a class="dropdown-item" href="#">Report</a>
+                                <% if (meta.authorID != id) { %>
+                                    <% if (id == null) { %>
+                                        <button class="dropdown-item" onclick="loginMessage();">Report</button>
+                                    <% } else { %>
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#report-modal">Report</button>
+                                    <% } %>
+                                <% } %>
+                                <% if (meta.authorID == id) { %>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#edit-modal">Edit</button>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#delete-modal">Delete</button>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -26,10 +40,19 @@
             </div>
             <div class="card-footer d-flex metaphor-footer">
                 <span class="text-muted mr-auto d-flex">
-                    <button class="btn-vote btn-like px-0" id="like-btn"></button>
-                    <%= meta.likeCount %>
-                    <button class="btn-vote btn-dislike px-0 ml-2" id="dislike-btn"></button>
-                    <%= meta.dislikeCount %>
+                    <% if (id == null) { %>
+                        <button class="btn-vote btn-like px-0" onclick="loginMessage();"></button>
+                        <p class="like-count"><%= meta.likeCount %></p>
+                        <button class="btn-vote btn-dislike px-0 ml-2" onclick="loginMessage();"></button>
+                        <p class="dislike-count"><%= meta.dislikeCount %></p>
+                    <% } %>
+                    <% if (id != null) { %>
+                        <button class="btn-vote btn-like btn-vote-allow px-0"></button>
+                        <p class="like-count"><%= meta.likeCount %></p>
+                        <button class="btn-vote btn-dislike btn-vote-allow px-0 ml-2"></button>
+                        <p class="dislike-count"><%= meta.dislikeCount %></p>
+                    <% } %>
+                    
                 </span>
                 <span class="text-muted ml-auto">Posted <%= meta.time_string %> by <a href="#"><%= meta.author %></a></span>
             </div>
