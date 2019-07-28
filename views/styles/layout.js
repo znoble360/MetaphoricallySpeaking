@@ -15,18 +15,10 @@ function postMetaphor()
 
 $("#search-form").submit( (e)=> {
     e.preventDefault();
+    console.log("hello");
     const searchString = $('#search-string').val();
-    console.log(searchString);
-    console.log(window.location.href);
 
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("response: " + xhr.responseText);
-        }
-    };
-    xhr.open("GET", "/search/search?searchString=" + searchString, true);
-    xhr.send();
+    window.location.href = "/search/search?searchString=" + searchString;
 });
 
 

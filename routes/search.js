@@ -4,6 +4,7 @@
 
 const express = require('express');
 const router = express.Router();
+const { ensureAuthenticated } = require('../config/auth');
 
 //gets metaphor model
 const Metaphor = require('../models/metaphor');
@@ -60,19 +61,35 @@ betterSearch = function (request, response){
 			if(documents2 != null){
 				returnArray.push(documents2);
 			}
-			
+
+			console.log("test");
+
 			//sends a JSON object with the array of results, labeled searchResults.
-			console.log("The return array for the search function is:" + returnArray);
-			response.send({searchResults : returnArray});
+
+			
+
+			if (request.isAuthenticated()) {
+				response.render("searchresults", {
+					page: "searchresults",
+					search: searchString,
+					name: request.user.name,
+					id: request.user._id,
+					email: request.user.email,
+					metaphor: returnArray
+				});
+			} else {
+				response.render("searchresults", {
+					page: "searchresults",
+					search: searchString,
+					name: null,
+					id: null,
+					email: null,
+					metaphor: returnArray
+				});
+			}
 		
 		});
-	
-		
 	});
-	
-
-
-
 }
 
 
