@@ -21,6 +21,7 @@ const metaphor2 = {
     explanation: "You are overreacting.",
     author: "metaknight1337",
     authorID: temp,
+    likeCount: "2043",
     dislikeCount: "50",
     time_string: "12/2/18 at 11:30"
 }
