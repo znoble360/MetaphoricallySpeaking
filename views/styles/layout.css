@@ -1,6 +1,7 @@
 body
 {
     padding-top: 100px;
+    background-color:;
 }
 
 .btn-vote
@@ -66,4 +67,10 @@ body
 .btn-metaphor-menu:focus
 {
     outline: none;
+}
+
+.new-metaphor-textarea
+{
+    resize: none;
+    border-radius: 5px;
 }
