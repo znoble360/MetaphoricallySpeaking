@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
-var metaphors;
 const temp = "5d2e39fbd4ffb0000462dfcd";
 
 //finds all the metaphors in the database
-Metaphor.find({}).exec(function (err, documents){
-    if (err)throw err;
-    else{ 
-       metaphors = documents;
-    }
+var getMetaphors = new Promise(function(resolve, reject) {
+    Metaphor.find({}).exec(function (err, documents){
+        if (err)throw err;
+        else{ 
+           resolve(documents);
+        }
+    });
 });
 
 //temporary variables for testing
@@ -39,13 +40,17 @@ const metaphor2 = {
 const metaphors2 = [metaphor1, metaphor2];
 
 //welcome page
-router.get('/', (req,res)=> res.render("welcome", {
-    page: "welcome",
-    id: null,
-    name: null,
-    email: null,
-    metaphor: metaphors
-}));
+router.get('/', (req,res)=> {
+    getMetaphors.then(function(metaphors) {
+        res.render("welcome", {
+            page: "welcome",
+            id: null,
+            name: null,
+            email: null,
+            metaphor: metaphors
+        });
+    });
+});
 
 router.get('/please-log-in', (req,res)=> {
     req.flash('success_msg', 'You must be logged in to do that.');
@@ -54,16 +59,18 @@ router.get('/please-log-in', (req,res)=> {
 
 
 router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
-
-    console.log("dash id: " + req.user._id);
-
-    res.render("dashboard", {
-    page: "dashboard",
-    name: req.user.name,
-    id: req.user._id,
-    email: req.user.email,
-    metaphor: metaphors
-})});
+    console.log("before");
+    getMetaphors.then(function(metaphors) {
+        console.log("after");
+        res.render("dashboard", {
+            page: "dashboard",
+            name: req.user.name,
+            id: req.user._id,
+            email: req.user.email,
+            metaphor: metaphors
+        });
+    });  
+});
 
 router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
 
