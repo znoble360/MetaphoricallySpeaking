@@ -90,8 +90,40 @@ betterSearch = function (request, response){
 	});
 }
 
+//Basically the same thing as betterSearch, but returns a JSON object for the app
+searchApp = function (request, response){
+	//gets string from request
+	const searchString = request.query.searchString;
+	
+	var returnArray = [];
+	
+	//uses a regular expression shortcut to query exactly what we need, and saves it in an array
+	//also specifies that the result must be sorted by likeCount
+	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, documents){
+		
+		//sets the result of the query to a return variable
+
+		returnArray.push(documents);
+		
+		//if a post ID was input, it will find that and push it onto the return array
+		Metaphor.find({_id: searchString}).exec(function (err, documents2){
+			
+			if(documents2 != null){
+				returnArray.push(documents2);
+			}
+
+			//sends a JSON object with the array of results, labeled searchResults.
+
+			response.send({searchResults : returnArray});
+		
+		});
+	});
+}
+
 
 router.get('/search', betterSearch);
+
+router.get('/searchApp', searchApp);
 
 module.exports = router;
 
