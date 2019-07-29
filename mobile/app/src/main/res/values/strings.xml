@@ -4,6 +4,6 @@
     <string name="metaphor">Metaphor</string>
     <string name="description">Description</string>
     <string name="url_base">https://metaphorically-speaking.herokuapp.com</string>
-    <string name="search">/search/search?searchString=</string>
+    <string name="search">/search/searchApp?searchString=</string>
 
 </resources>
