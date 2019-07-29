@@ -62,7 +62,7 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
     name: req.user.name,
     id: req.user._id,
     email: req.user.email,
-    metaphor: metaphors2
+    metaphor: metaphors
 })});
 
 router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
