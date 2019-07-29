@@ -5,22 +5,28 @@ function logout()
 
 function postMetaphor()
 {
-    // const text = $("#text").val();
-    // const explanation = $("#explanation").val();
-    // $("#text").val("");
-    // $("#explanation").val("");
-    // $('#new-metaphor-modal').modal('toggle');
-    // console.log("text: " + text + "\nexplanation: " + explanation);
+    const text = $("#text").val();
+    const exp = $("#explanation").val();
 
-    // var xhr = new XMLHttpRequest();
+    const body = "text=" + text + "&explanation=" + exp;
+    const payload = body.replace(/ /g, "+");
 
-    // xhr.onreadystatechange = function() {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //     window.location.href = "/dashboard";
-    //     }
-    // };
-    // xhr.open("POST", "/metaphors/add", true);
-    // xhr.send();
+    $("#text").val("");
+    $("#explanation").val("");
+    $('#new-metaphor-modal').modal('toggle');
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+            window.location.href = "/dashboard";
+        }
+    };
+
+    xhr.open("POST", "/metaphors/add", true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(payload);
 }
 
 $("#search-form").submit( (e)=> {

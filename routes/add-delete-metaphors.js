@@ -51,7 +51,7 @@ router.post('/add', (req,res,next)=>{
         res.send( error );
       } else {
         console.log( "Metaphor created successfully!" );
-      
+        res.send( "Metaphor created successfully!" );
       }
 
     } );
