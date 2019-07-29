@@ -3,6 +3,12 @@
 <% } %>
 
 <% metaphor.forEach((meta)=>{ %>
+    <% if (typeof meta.likeCount == 'undefined') {
+        meta.likeCount = 0;
+    };
+    if (typeof meta.dislikeCount == 'undefined') {
+        meta.dislikeCount = 0;
+    }; %>
     <div class="metaphor-default" id="<%= meta._id %>">
         <div class="card mb-5">
             <div class="card-body">
@@ -48,9 +54,9 @@
                     <% } %>
                     <% if (id != null) { %>
                         <button class="btn-vote btn-like btn-vote-allow px-0"></button>
-                        <p class="like-count"><%= meta.likeCount %></p>
+                        <p class="like-count"><%= meta.likeCount.toString() %></p>
                         <button class="btn-vote btn-dislike btn-vote-allow px-0 ml-2"></button>
-                        <p class="dislike-count"><%= meta.dislikeCount %></p>
+                        <p class="dislike-count"><%= meta.dislikeCount.toString() %></p>
                     <% } %>
                     
                 </span>

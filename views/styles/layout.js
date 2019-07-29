@@ -76,7 +76,7 @@ $('.btn-vote.btn-like.btn-vote-allow').on('click', function(){
         likeCount++;
         metaphor.removeClass("metaphor-default");
         metaphor.addClass("metaphor-liked");
-        element.next().html(likeCount.toString());
+        element.next().html(likeCount);
     }
 
     else if (metaphor.attr('class') == "metaphor-liked")
@@ -84,7 +84,7 @@ $('.btn-vote.btn-like.btn-vote-allow').on('click', function(){
         likeCount--;
         metaphor.removeClass("metaphor-liked");
         metaphor.addClass("metaphor-default");
-        element.next().html(likeCount.toString());
+        element.next().html(likeCount);
     }
 
     else if (metaphor.attr('class') == "metaphor-disliked")
@@ -93,8 +93,8 @@ $('.btn-vote.btn-like.btn-vote-allow').on('click', function(){
         dislikeCount--;
         metaphor.removeClass("metaphor-disliked");
         metaphor.addClass("metaphor-liked");
-        element.next().html(likeCount.toString());
-        element.next().next().next().html(dislikeCount.toString());
+        element.next().html(likeCount);
+        element.next().next().next().html(dislikeCount);
     };
 });
 
@@ -109,7 +109,7 @@ $('.btn-vote.btn-dislike.btn-vote-allow').on('click', function(){
         dislikeCount++;
         metaphor.removeClass("metaphor-default");
         metaphor.addClass("metaphor-disliked");
-        element.next().html(dislikeCount.toString());
+        element.next().html(dislikeCount);
     }
 
     else if (metaphor.attr('class') == "metaphor-disliked")
@@ -117,7 +117,7 @@ $('.btn-vote.btn-dislike.btn-vote-allow').on('click', function(){
         dislikeCount--;
         metaphor.removeClass("metaphor-disliked");
         metaphor.addClass("metaphor-default");
-        element.next().html(dislikeCount.toString());
+        element.next().html(dislikeCount);
     }
 
     else if (metaphor.attr('class') == "metaphor-liked")
@@ -126,7 +126,7 @@ $('.btn-vote.btn-dislike.btn-vote-allow').on('click', function(){
         likeCount--;
         metaphor.removeClass("metaphor-liked");
         metaphor.addClass("metaphor-disliked");
-        element.next().html(dislikeCount.toString());
-        element.prev().html(likeCount.toString());
+        element.next().html(dislikeCount);
+        element.prev().html(likeCount);
     };
 });
