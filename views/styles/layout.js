@@ -3,6 +3,12 @@ function logout()
     window.location.href = "/users/logout";
 }
 
+function goback()
+{
+    window.history.go(-1);
+    return false;
+}
+
 function postMetaphor()
 {
     const text = $("#text").val();
@@ -31,8 +37,8 @@ function postMetaphor()
 
 $("#search-form").submit( (e)=> {
     e.preventDefault();
-    console.log("hello");
     const searchString = $('#search-string').val();
+    $('#search-string').val("");
 
     window.location.href = "/search/search?searchString=" + searchString;
 });
