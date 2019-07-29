@@ -50,40 +50,57 @@ betterSearch = function (request, response){
 	
 	//uses a regular expression shortcut to query exactly what we need, and saves it in an array
 	//also specifies that the result must be sorted by likeCount
-	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, documents){
+	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, textResult){
 		
 		//sets the result of the query to a return variable
-
-		returnArray.push(documents);
-		
+		if(textResult != null){
+			returnArray.push(textResult);				
+		}
+	
 		//if a post ID was input, it will find that and push it onto the return array
-		Metaphor.find({_id: searchString}).exec(function (err, documents2){
-			if(documents2 != null){
-				returnArray.push(documents2);
+		Metaphor.find({_id: searchString}).exec(function (err, metaIDResult){
+			
+			if(metaIDResult != null){
+				returnArray.push(metaIDResult);
 			}
-
-			//redirects to search results page with credentials if user is logged in
-
-			if (request.isAuthenticated()) {
-				response.render("searchresults", {
-					page: "searchresults",
-					search: searchString,
-					name: request.user.name,
-					id: request.user._id,
-					email: request.user.email,
-					metaphor: returnArray[0]
+			
+			Metaphor.find({authorID: searchString}).exec(function (err, authIDResult){
+				
+				if(authIDResult != null){
+					returnArray.push(authIDResult);
+				}
+				
+				Metaphor.find({author: searchString}).exec(function (err,authorResult){
+					
+					if(authorResult != null){
+						returnArray.push(authorResult);
+					}
+					
+					// redirects to page with credentials if user is logged in
+					
+					if (request.isAuthenticated()) {
+						response.render("searchresults", {
+						page: "searchresults",
+						search: searchString,
+						name: request.user.name,
+						id: request.user._id,
+						email: request.user.email,
+						metaphor: returnArray[0]
+						});
+					} else {
+						response.render("searchresults", {
+						page: "searchresults",
+						search: searchString,
+						name: null,
+						id: null,
+						email: null,
+						metaphor: returnArray[0]
+						});
+					}
+				
+					
 				});
-			} else {
-				response.render("searchresults", {
-					page: "searchresults",
-					search: searchString,
-					name: null,
-					id: null,
-					email: null,
-					metaphor: returnArray[0]
-				});
-			}
-		
+			});
 		});
 	});
 }
@@ -97,23 +114,40 @@ searchApp = function (request, response){
 	
 	//uses a regular expression shortcut to query exactly what we need, and saves it in an array
 	//also specifies that the result must be sorted by likeCount
-	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, documents){
+	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, textResult){
 		
 		//sets the result of the query to a return variable
-
-		returnArray.push(documents);
-		
+		if(textResult != null){
+			returnArray.push(textResult);				
+		}
+	
 		//if a post ID was input, it will find that and push it onto the return array
-		Metaphor.find({_id: searchString}).exec(function (err, documents2){
+		Metaphor.find({_id: searchString}).exec(function (err, metaIDResult){
 			
-			if(documents2 != null){
-				returnArray.push(documents2);
+			if(metaIDResult != null){
+				returnArray.push(metaIDResult);
 			}
-
-			//sends a JSON object with the array of results, labeled searchResults.
-
-			response.send({searchResults : returnArray});
-		
+			
+			//searches for the author by ID
+			Metaphor.find({authorID: searchString}).exec(function (err, authIDResult){
+				
+				if(authIDResult != null){
+					returnArray.push(authIDResult);
+				}
+				
+				//searches for the author by name
+				Metaphor.find({author: searchString}).exec(function (err,authorResult){
+					
+					if(authorResult != null){
+						returnArray.push(authorResult);
+					}
+					
+					//sends a json object with the results of the search
+					response.send({searchResults : returnArray});
+				
+					
+				});
+			});
 		});
 	});
 }
@@ -124,4 +158,3 @@ router.get('/search', betterSearch);
 router.get('/searchApp', searchApp);
 
 module.exports = router;
-
