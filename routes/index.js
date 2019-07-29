@@ -16,32 +16,6 @@ var getMetaphors = function(query, sort) {
     });
 }
 
-
-//temporary variables for testing
-const metaphor1 = {
-    _id: "000",
-    text: "It's raining cats and dogs.",
-    explanation: "It is raining hard.",
-    author: "metaphor_guy",
-    authorID: "xxx",
-    likeCount: "130",
-    dislikeCount: "14",
-    time: "3 days ago"
-}
-
-const metaphor2 = {
-    _id: "111",
-    text: "Cry me a river.",
-    explanation: "You are overreacting.",
-    author: "metaknight1337",
-    authorID: temp,
-    likeCount: "2043",
-    dislikeCount: "50",
-    time: "12/2/18 at 11:30"
-}
-
-const metaphors2 = [metaphor1, metaphor2];
-
 //welcome page
 router.get('/', (req,res)=> {
     getMetaphors(null, {likeCount : -1}).then(function(metaphors) {
@@ -49,6 +23,7 @@ router.get('/', (req,res)=> {
             page: "welcome",
             id: null,
             name: null,
+            username: null,
             email: null,
             metaphor: metaphors
         });
@@ -66,7 +41,8 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
         res.render("dashboard", {
             page: "dashboard",
             name: req.user.name,
-            id: req.user._id,
+            username: req.user.username,
+            id: req.user._id.toHexString(),
             email: req.user.email,
             metaphor: metaphors
         });
@@ -80,7 +56,8 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
         res.render("myprofile", {
             page: "myprofile",
             name: req.user.name,
-            id: req.user._id,
+            username: req.user.username,
+            id: req.user._id.toHexString(),
             email: req.user.email,
             metaphor: metaphors,
             display: "posts"
@@ -95,7 +72,8 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
         res.render("myprofile", {
             page: "myprofile",
             name: req.user.name,
-            id: req.user._id,
+            username: req.user.username,
+            id: req.user._id.toHexString(),
             email: req.user.email,
             metaphor: metaphors,
             display: "likes"
