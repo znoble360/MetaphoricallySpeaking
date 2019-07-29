@@ -3,6 +3,11 @@ function logout()
     window.location.href = "/users/logout";
 }
 
+function timeString(date)
+{
+    console.log("date: " + date);
+}
+
 function goback()
 {
     window.history.go(-1);

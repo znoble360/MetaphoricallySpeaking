@@ -13,5 +13,5 @@ let MetaphorSchema = new mongoose.Schema( {
   author: {type: mongoose.Schema.Types.String, ref: 'User'}
 } );
 
-const MetaphorModel = mongoose.model('Metaphor', MetaphorSchema)
+const MetaphorModel = mongoose.model('Metaphor', MetaphorSchema);
 module.exports = MetaphorModel;

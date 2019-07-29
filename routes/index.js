@@ -1,7 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
+const Metaphor = require('../models/metaphor');
+var metaphors;
 const temp = "5d2e39fbd4ffb0000462dfcd";
+
+//finds all the metaphors in the database
+Metaphor.find({}).exec(function (err, documents){
+    if (err)throw err;
+    else{ 
+       metaphors = documents;
+    }
+});
 
 //temporary variables for testing
 const metaphor1 = {
@@ -12,7 +22,7 @@ const metaphor1 = {
     authorID: "xxx",
     likeCount: "130",
     dislikeCount: "14",
-    time_string: "3 days ago"
+    time: "3 days ago"
 }
 
 const metaphor2 = {
@@ -23,7 +33,7 @@ const metaphor2 = {
     authorID: temp,
     likeCount: "2043",
     dislikeCount: "50",
-    time_string: "12/2/18 at 11:30"
+    time: "12/2/18 at 11:30"
 }
 
 const metaphors2 = [metaphor1, metaphor2];
@@ -34,7 +44,7 @@ router.get('/', (req,res)=> res.render("welcome", {
     id: null,
     name: null,
     email: null,
-    metaphor: metaphors2
+    metaphor: metaphors
 }));
 
 router.get('/please-log-in', (req,res)=> {

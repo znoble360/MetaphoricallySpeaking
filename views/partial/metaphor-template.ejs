@@ -3,7 +3,7 @@
 <% } %>
 
 <% metaphor.forEach((meta)=>{ %>
-    <%- "<div class="%>metaphor-default<%-" id="%> <%= meta._id %> <%-">" %>
+    <div class="metaphor-default" id="<%= meta._id %>">
         <div class="card mb-5">
             <div class="card-body">
 
@@ -54,7 +54,7 @@
                     <% } %>
                     
                 </span>
-                <span class="text-muted ml-auto">Posted <%= meta.time_string %> by <a href="#"><%= meta.author %></a></span>
+                <span class="text-muted ml-auto">Posted <%= meta.time %> by <a href="#"><%= meta.author %></a></span>
             </div>
         </div>
     </div>
