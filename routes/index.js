@@ -5,9 +5,9 @@ const Metaphor = require('../models/metaphor');
 const temp = "5d2e39fbd4ffb0000462dfcd";
 
 //finds all the metaphors in the database
-var getMetaphors = function(query) {
+var getMetaphors = function(query, sort) {
     return new Promise(function(resolve, reject) {
-        Metaphor.find(query).exec(function (err, documents){
+        Metaphor.find(query).sort(sort).exec(function (err, documents){
             if (err)throw err;
             else{ 
                resolve(documents);
@@ -44,7 +44,7 @@ const metaphors2 = [metaphor1, metaphor2];
 
 //welcome page
 router.get('/', (req,res)=> {
-    getMetaphors(null).then(function(metaphors) {
+    getMetaphors(null, {likeCount : -1}).then(function(metaphors) {
         res.render("welcome", {
             page: "welcome",
             id: null,
@@ -62,7 +62,7 @@ router.get('/please-log-in', (req,res)=> {
 
 
 router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
-    getMetaphors(null).then(function(metaphors) {
+    getMetaphors(null, {likeCount : -1}).then(function(metaphors) {
         res.render("dashboard", {
             page: "dashboard",
             name: req.user.name,
@@ -76,7 +76,7 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
 router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
 
     console.log("myprof id: " + req.user._id);
-    getMetaphors({authorID: req.user._id}).then(function(metaphors) {
+    getMetaphors({authorID: req.user._id}, {time : -1}).then(function(metaphors) {
         res.render("myprofile", {
             page: "myprofile",
             name: req.user.name,
@@ -91,7 +91,7 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
 router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
 
     
-    getMetaphors({likedBy: req.user._id}).then(function(metaphors) {
+    getMetaphors({likedBy: req.user._id}, {time : -1}).then(function(metaphors) {
         res.render("myprofile", {
             page: "myprofile",
             name: req.user.name,

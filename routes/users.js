@@ -19,10 +19,10 @@ router.get('/register', (req,res)=>res.render('register', {
 //register handle
 router.post('/register', (req,res,next)=>{
 
-    const {name,email,password, password2} = req.body;
+    const {name, username, email, password, password2} = req.body;
     let errors = [];
 
-    if(!name || !email || !password || !password2){
+    if(!name || !username || !email || !password || !password2){
 
         errors.push({msg: "Please fill in all fields"});
     }
@@ -46,6 +46,7 @@ router.post('/register', (req,res,next)=>{
 
             errors,
             name,
+            username,
             email,
             password,
             password2,
@@ -53,15 +54,15 @@ router.post('/register', (req,res,next)=>{
         });
     }
     else{
-        User.findOne({email : email})
-        .then(user => {
+        User.findOne({email : email}).then(user => {
             if(user){
                 //user exists
-                errors.push({msg: 'User is already registered'});
+                errors.push({msg: 'Email is already registered'});
                 res.render('register',{
 
                     errors,
                     name,
+                    username,
                     email,
                     password,
                     password2,
@@ -70,32 +71,48 @@ router.post('/register', (req,res,next)=>{
             }
             else{
 
-                const newUser  = new User({
-                    name: name,
-                    email: email,
-                    password: password
+                User.findOne({username : username}).then(user => {
+                    if(user){
+                        //user exists
+                        errors.push({msg: 'Username is already registered'});
+                        res.render('register',{
+                            errors,
+                            name,
+                            username,
+                            email,
+                            password,
+                            password2,
+                            page: "register"
+                        });
+                    } else {
 
+                        const newUser  = new User({
+                            name: name,
+                            username: username,
+                            email: email,
+                            password: password
+        
+                        });                        
+               
+                        //Hash Password
+                        bcrypt.genSalt(10, (err ,salt)=>
+                            bcrypt.hash(newUser.password, salt,(err, hash)=> {
+        
+                                if(err) throw err;
+                                //password hashed
+                                newUser.password = hash;
+            
+                                //save user
+                                newUser.save()
+                                .then(user =>{
+                                    
+                                    req.flash('success_msg', 'You have successfully created an account');
+                                    res.redirect('./login');
+                                }).catch(err => console.log(err));
+                            })
+                        );
+                    }
                 });
-                
-       
-                //Hash Password
-                bcrypt.genSalt(10, (err ,salt)=>
-                 bcrypt.hash(newUser.password, salt,(err, hash)=> {
-
-                    if(err) throw err;
-                    //password hashed
-                    newUser.password = hash;
-
-                    //save user
-                    newUser.save()
-                    .then(user =>{
-                        
-                        req.flash('success_msg', 'You have successfully created an account');
-                        res.redirect('./login');
-                    })
-                    .catch(err => console.log(err));
-                 })
-                 )
             }   
         });
     
