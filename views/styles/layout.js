@@ -5,12 +5,22 @@ function logout()
 
 function postMetaphor()
 {
-    const text = $("#text").val();
-    const explanation = $("#explanation").val();
-    $("#text").val("");
-    $("#explanation").val("");
-    $('#new-metaphor-modal').modal('toggle');
-    console.log("text: " + text + "\nexplanation: " + explanation);
+    // const text = $("#text").val();
+    // const explanation = $("#explanation").val();
+    // $("#text").val("");
+    // $("#explanation").val("");
+    // $('#new-metaphor-modal').modal('toggle');
+    // console.log("text: " + text + "\nexplanation: " + explanation);
+
+    // var xhr = new XMLHttpRequest();
+
+    // xhr.onreadystatechange = function() {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //     window.location.href = "/dashboard";
+    //     }
+    // };
+    // xhr.open("POST", "/metaphors/add", true);
+    // xhr.send();
 }
 
 $("#search-form").submit( (e)=> {

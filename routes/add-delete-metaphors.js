@@ -37,7 +37,8 @@ router.post('/add', (req,res,next)=>{
   	let metaphor = new Metaphor( {
     	  text: req.body.text,
         explanation: req.body.explanation,
-        author: req.user._id
+        authorID: req.user._id,
+        author: req.user.name
     } );
 
   	// After you create/get an object using the model, you must call the model's methods to actually interact with the database
