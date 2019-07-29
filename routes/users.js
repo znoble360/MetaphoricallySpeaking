@@ -6,10 +6,14 @@ const passport = require('passport');
 //user model
 const User = require('../models/user');
 
-router.get('/login', (req,res)=>res.render('login'));
+router.get('/login', (req,res)=>res.render('login', {
+    page: "login"
+}));
 
 
-router.get('/register', (req,res)=>res.render('register'));
+router.get('/register', (req,res)=>res.render('register', {
+    page: "register"
+}));
 
 
 //register handle
@@ -44,7 +48,8 @@ router.post('/register', (req,res,next)=>{
             name,
             email,
             password,
-            password2
+            password2,
+            page: "register"
         });
     }
     else{
@@ -59,7 +64,8 @@ router.post('/register', (req,res,next)=>{
                     name,
                     email,
                     password,
-                    password2
+                    password2,
+                    page: "register"
                 });
             }
             else{
