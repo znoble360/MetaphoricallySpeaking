@@ -54,30 +54,29 @@ betterSearch = function (request, response){
 		
 		//sets the result of the query to a return variable
 		if(textResult != null){
-			returnArray.push(textResult);				
+			returnArray = returnArray.concat(textResult);			
 		}
 	
 		//if a post ID was input, it will find that and push it onto the return array
 		Metaphor.find({_id: searchString}).exec(function (err, metaIDResult){
 			
 			if(metaIDResult != null){
-				returnArray.push(metaIDResult);
+				returnArray = returnArray.concat(metaIDResult);
 			}
 			
 			Metaphor.find({authorID: searchString}).exec(function (err, authIDResult){
 				
 				if(authIDResult != null){
-					returnArray.push(authIDResult);
+					returnArray = returnArray.concat(authIDResult);
 				}
 				
 				Metaphor.find({author: searchString}).exec(function (err,authorResult){
 					
 					if(authorResult != null){
-						returnArray.push(authorResult);
+						returnArray = returnArray.concat(authorResult);
 					}
 					
-					// redirects to page with credentials if user is logged in
-					
+					// redirects to page with credentials if user is logged in					
 					if (request.isAuthenticated()) {
 						response.render("searchresults", {
 						page: "searchresults",
@@ -85,7 +84,7 @@ betterSearch = function (request, response){
 						name: request.user.name,
 						id: request.user._id,
 						email: request.user.email,
-						metaphor: returnArray[0]
+						metaphor: returnArray
 						});
 					} else {
 						response.render("searchresults", {
@@ -94,7 +93,7 @@ betterSearch = function (request, response){
 						name: null,
 						id: null,
 						email: null,
-						metaphor: returnArray[0]
+						metaphor: returnArray
 						});
 					}
 				

@@ -5,14 +5,17 @@ const Metaphor = require('../models/metaphor');
 const temp = "5d2e39fbd4ffb0000462dfcd";
 
 //finds all the metaphors in the database
-var getMetaphors = new Promise(function(resolve, reject) {
-    Metaphor.find({}).exec(function (err, documents){
-        if (err)throw err;
-        else{ 
-           resolve(documents);
-        }
+var getMetaphors = function(query) {
+    return new Promise(function(resolve, reject) {
+        Metaphor.find(query).exec(function (err, documents){
+            if (err)throw err;
+            else{ 
+               resolve(documents);
+            }
+        });
     });
-});
+}
+
 
 //temporary variables for testing
 const metaphor1 = {
@@ -41,7 +44,7 @@ const metaphors2 = [metaphor1, metaphor2];
 
 //welcome page
 router.get('/', (req,res)=> {
-    getMetaphors.then(function(metaphors) {
+    getMetaphors(null).then(function(metaphors) {
         res.render("welcome", {
             page: "welcome",
             id: null,
@@ -59,9 +62,7 @@ router.get('/please-log-in', (req,res)=> {
 
 
 router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
-    console.log("before");
-    getMetaphors.then(function(metaphors) {
-        console.log("after");
+    getMetaphors(null).then(function(metaphors) {
         res.render("dashboard", {
             page: "dashboard",
             name: req.user.name,
@@ -75,26 +76,32 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
 router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
 
     console.log("myprof id: " + req.user._id);
-
-    res.render("myprofile", {
-    page: "myprofile",
-    name: req.user.name,
-    id: req.user._id,
-    email: req.user.email,
-    metaphor: metaphors2,
-    display: "posts"
-})});
+    getMetaphors({authorID: req.user._id}).then(function(metaphors) {
+        res.render("myprofile", {
+            page: "myprofile",
+            name: req.user.name,
+            id: req.user._id,
+            email: req.user.email,
+            metaphor: metaphors,
+            display: "posts"
+        });
+    });
+});
 
 router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
 
-    res.render("myprofile", {
-    page: "myprofile",
-    name: req.user.name,
-    id: req.user._id,
-    email: req.user.email,
-    metaphor: metaphors2,
-    display: "likes"
-})});
+    
+    getMetaphors({likedBy: req.user._id}).then(function(metaphors) {
+        res.render("myprofile", {
+            page: "myprofile",
+            name: req.user.name,
+            id: req.user._id,
+            email: req.user.email,
+            metaphor: metaphors,
+            display: "likes"
+        });
+    });
+});
 
 
 module.exports = router;
