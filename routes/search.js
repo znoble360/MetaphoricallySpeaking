@@ -62,9 +62,7 @@ betterSearch = function (request, response){
 				returnArray.push(documents2);
 			}
 
-			//sends a JSON object with the array of results, labeled searchResults.
-
-			
+			//redirects to search results page with credentials if user is logged in
 
 			if (request.isAuthenticated()) {
 				response.render("searchresults", {
