@@ -62,8 +62,6 @@ betterSearch = function (request, response){
 				returnArray.push(documents2);
 			}
 
-			console.log("test");
-
 			//sends a JSON object with the array of results, labeled searchResults.
 
 			
@@ -75,7 +73,7 @@ betterSearch = function (request, response){
 					name: request.user.name,
 					id: request.user._id,
 					email: request.user.email,
-					metaphor: returnArray
+					metaphor: returnArray[0]
 				});
 			} else {
 				response.render("searchresults", {
@@ -84,7 +82,7 @@ betterSearch = function (request, response){
 					name: null,
 					id: null,
 					email: null,
-					metaphor: returnArray
+					metaphor: returnArray[0]
 				});
 			}
 		

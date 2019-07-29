@@ -5,7 +5,7 @@ const temp = "5d2e39fbd4ffb0000462dfcd";
 
 //temporary variables for testing
 const metaphor1 = {
-    id: "000",
+    _id: "000",
     text: "It's raining cats and dogs.",
     explanation: "It is raining hard.",
     author: "metaphor_guy",
@@ -16,7 +16,7 @@ const metaphor1 = {
 }
 
 const metaphor2 = {
-    id: "111",
+    _id: "111",
     text: "Cry me a river.",
     explanation: "You are overreacting.",
     author: "metaknight1337",
