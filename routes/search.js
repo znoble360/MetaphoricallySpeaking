@@ -90,8 +90,6 @@ betterSearch = function (request, response){
 					if(authorResult != null){
 						returnArray = returnArray.concat(authorResult);
 					}
-
-					console.log("returnArray: " + returnArray);
 					
 					// redirects to page with credentials if user is logged in					
 					if (request.isAuthenticated()) {
@@ -159,8 +157,6 @@ searchApp = function (request, response){
 					if(authorResult != null){
 						returnArray = returnArray.concat(authorResult);
 					}
-
-					console.log("returnArray: " + returnArray);
 					
 					//sends a json object with the results of the search
 					response.send({searchResults : returnArray});
