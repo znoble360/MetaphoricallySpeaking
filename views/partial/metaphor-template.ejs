@@ -10,8 +10,10 @@
         meta.dislikeCount = 0;
     }; %>
 
+    <% console.log("page (metaphor-template): " + page) %>
+
     
-    <div class="metaphor-default" id="<%= meta._id %>">
+    <div class="<%= meta.class %>" id="<%= meta._id %>">
         <div class="card mb-5">
             <div class="card-body">
 
@@ -27,7 +29,7 @@
                             <div class="dropdown-menu p-0">
                                 <% if (meta.authorID != id) { %>
                                     <% if (id == null) { %>
-                                        <button class="dropdown-item" onclick="loginMessage();">Report</button>
+                                        <button class="dropdown-item" onclick="loginMessage()">Report</button>
                                     <% } else { %>
                                         <button class="dropdown-item" data-toggle="modal" data-target="#report-modal">Report</button>
                                     <% } %>
@@ -60,7 +62,6 @@
                         <button class="btn-vote btn-dislike btn-vote-allow px-0 ml-2" onclick="voteRequest('<%=meta._id%>','<%=id%>', 'dislike')"></button>
                         <p class="dislike-count"><%= meta.dislikeCount.toString() %></p>
                     <% } %>
-<%console.log(meta)%>
                 </span>
                 <span class="text-muted ml-auto">Posted <%= meta.time %> by <a href="#"><%= meta.author %></a></span>
             </div>

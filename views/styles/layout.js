@@ -96,7 +96,18 @@ function report()
 
 function loginMessage()
 {
-    window.location.href = "/please-log-in";
+    var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.open("GET", "/please-log-in", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
 }
 
 // edit-modal show event handler
@@ -235,7 +246,6 @@ function voteRequest(metaid, userid, vote){
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(xhr.responseText);
-  
         }
     };
   

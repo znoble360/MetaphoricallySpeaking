@@ -10,6 +10,18 @@ const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
 var sortmethod = "default";
 
+var setClasses = function(metaphors, id) {
+    metaphors.forEach( (meta) => {
+        if (meta.likedBy.includes(id)) {
+            meta.class = "metaphor-liked";
+        } else if (meta.dislikedBy.includes(id)) {
+            meta.class = "metaphor-disliked";
+        } else {
+            meta.class = "metaphor-default";
+        }
+    });
+}
+
 
 var search = function (request, response){
 	//gets string from request
@@ -93,6 +105,7 @@ betterSearch = function (request, response){
 					
 					// redirects to page with credentials if user is logged in					
 					if (request.isAuthenticated()) {
+						setClasses(returnArray, request.user._id);
 						response.render("searchresults", {
 						page: "searchresults",
 						search: searchString,
@@ -103,6 +116,7 @@ betterSearch = function (request, response){
 						sortmethod: sort
 						});
 					} else {
+						setClasses(returnArray, null);
 						response.render("searchresults", {
 						page: "searchresults",
 						search: searchString,

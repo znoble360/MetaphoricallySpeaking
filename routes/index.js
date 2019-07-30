@@ -18,6 +18,18 @@ var getMetaphors = function(query, sort) {
     });
 }
 
+var setClasses = function(metaphors, id) {
+    metaphors.forEach( (meta) => {
+        if (meta.likedBy.includes(id)) {
+            meta.class = "metaphor-liked";
+        } else if (meta.dislikedBy.includes(id)) {
+            meta.class = "metaphor-disliked";
+        } else {
+            meta.class = "metaphor-default";
+        }
+    });
+}
+
 //welcome page
 router.get('/', (req,res)=> {
     var method;
@@ -36,6 +48,7 @@ router.get('/', (req,res)=> {
     }
 
     getMetaphors(null, method).then(function(metaphors) {
+        setClasses(metaphors, null);
         res.render("welcome", {
             page: "welcome",
             id: null,
@@ -49,8 +62,10 @@ router.get('/', (req,res)=> {
 });
 
 router.get('/please-log-in', (req,res)=> {
+
     req.flash('success_msg', 'You must be logged in to do that.');
-    res.redirect("/");
+    res.send("Please log in");
+
 });
 
 
@@ -71,6 +86,7 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
     }
 
     getMetaphors(null, method).then(function(metaphors) {
+        setClasses(metaphors, req.user._id);
         res.render("dashboard", {
             page: "dashboard",
             name: req.user.name,
@@ -100,6 +116,7 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
     }
     
     getMetaphors({authorID: req.user._id}, method).then(function(metaphors) {
+        setClasses(metaphors, req.user._id);
         res.render("myprofile", {
             page: "myprofile",
             name: req.user.name,
@@ -130,6 +147,7 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
     }
     
     getMetaphors({likedBy: req.user._id}, method).then(function(metaphors) {
+        setClasses(metaphors, req.user._id);
         res.render("myprofile", {
             page: "myprofilelikes",
             name: req.user.name,
@@ -144,9 +162,7 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
 });
 
 router.put('/sort/:sortmethod', (req,res) => {
-    console.log("sortmethod: " + req.params.sortmethod);
     sortmethod = req.params.sortmethod;
-
     res.send("Sort method updated to " + sortmethod);
 });
 
