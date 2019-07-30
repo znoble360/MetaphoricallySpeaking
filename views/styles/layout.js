@@ -108,8 +108,6 @@ $('#delete-modal').on('show.bs.modal', function (event) {
 
         $('#delete-modal').modal('toggle');
     
-        console.log("metaid: " + metaid);
-    
         var xhr = new XMLHttpRequest();
     
         xhr.onreadystatechange = function() {

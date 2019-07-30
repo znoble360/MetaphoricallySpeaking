@@ -18,14 +18,6 @@ const Metaphor = require('../models/metaphor');
 
 router.post('/add', (req,res,next)=>{
 
-  	Metaphor.find( {}, "text explanation", function( error, records ){
-      if( error ){
-       	console.log( error );
-      } else {
-      	console.log( "All metaphors: ", records );
-      }
-    } );
-
     // The following code runs when a user sends an HTTP request to the /add route of your app using the POST method
     // TODO: Add a single record to the database with data from the request
 
@@ -76,8 +68,6 @@ router.delete('/delete/:id', (req,res,next)=>{
   // body parameters: req.body
   // query string: req.query
   // route parameters: req.params
-
-  console.log( "id: ", req.params.id );
 
   //              specify which metaphor to find
   //                      v

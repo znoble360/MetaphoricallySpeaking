@@ -50,8 +50,6 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
 });
 
 router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
-
-    console.log("myprof id: " + req.user._id);
     getMetaphors({authorID: req.user._id}, {time : -1}).then(function(metaphors) {
         res.render("myprofile", {
             page: "myprofile",
