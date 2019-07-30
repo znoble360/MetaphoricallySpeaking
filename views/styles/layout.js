@@ -48,14 +48,38 @@ $("#search-form").submit( (e)=> {
     window.location.href = "/search/search?searchString=" + searchString + "&sort=Most+Liked";
 });
 
-function changeSearchSort(sort, search)
-{
-    window.location.href = "/search/search?searchString=" + search + "&sort=" + sort;
+function changeSearchSort(sort)
+{    
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+            location.reload();
+        }
+    };
+
+    xhr.open("PUT", "/search/sort/" + sort, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
 }
 
 function changeSortMethod(sort)
 {
-    
+    const url = "/sort/" + sort;
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+            location.reload();
+        }
+    };
+
+    xhr.open("PUT", url, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
 }
 
 

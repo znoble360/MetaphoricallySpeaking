@@ -8,6 +8,7 @@ const { ensureAuthenticated } = require('../config/auth');
 
 //gets metaphor model
 const Metaphor = require('../models/metaphor');
+var sortmethod = "default";
 
 
 var search = function (request, response){
@@ -45,8 +46,15 @@ var search = function (request, response){
 betterSearch = function (request, response){
 	//gets string from request
 	const searchString = request.query.searchString;
-	const sort = request.query.sort;
+	var sort = "Most Liked";
 	var method;
+
+	if (sortmethod != "default")
+	{
+		sort = sortmethod;
+		sortmethod = "default";
+	}
+	
 	if (sort == "Most Liked") {
 		method = {likeCount : -1};
 	} else if (sort == "Newest") {
@@ -160,6 +168,11 @@ searchApp = function (request, response){
 	});
 }
 
+router.put('/sort/:sortmethod', (req,res) => {
+    sortmethod = req.params.sortmethod;
+    
+    res.send("Sort method updated to " + sortmethod);
+});
 
 router.get('/search', betterSearch);
 

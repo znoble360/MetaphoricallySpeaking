@@ -7,14 +7,14 @@
         <div class="dropdown-menu">
             <% if (sortmethod == "Most Liked") { %>
                 <% if (page == "searchresults") { %>
-                    <button class="dropdown-item" onclick="changeSearchSort('Newest', '<%= search %>');">Newest</button>
+                    <button class="dropdown-item" onclick="changeSearchSort('Newest');">Newest</button>
                 <% } else { %>
                     <button class="dropdown-item" onclick="changeSortMethod('Newest');">Newest</button>
                 <% } %>
             <% } %>
             <% if (sortmethod == "Newest") { %>
                 <% if (page == "searchresults") { %>
-                    <button class="dropdown-item" onclick="changeSearchSort('Most Liked', '<%= search %>');">Most Liked</button>
+                    <button class="dropdown-item" onclick="changeSearchSort('Most Liked');">Most Liked</button>
                 <% } else { %>
                     <button class="dropdown-item" onclick="changeSortMethod('Most Liked');">Most Liked</button>
                 <% } %>

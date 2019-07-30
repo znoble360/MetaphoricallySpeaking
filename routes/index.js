@@ -4,6 +4,7 @@ const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
 const sortByNew = {time : -1};
 const sortByLikes = {likeCount : -1};
+var sortmethod = "default";
 
 //finds all the metaphors in the database
 var getMetaphors = function(query, sort) {
@@ -19,13 +20,13 @@ var getMetaphors = function(query, sort) {
 
 //welcome page
 router.get('/', (req,res)=> {
-    console.log("sort: " + req.body.sort)
     var method;
     var sort = "Most Liked";
 
-    if (typeof req.body.sort != 'undefined')
+    if (sortmethod != "default")
     {
-        sort = req.body.sort;
+        sort = sortmethod;
+        sortmethod = "default";
     }
 
     if (sort == "Most Liked") {
@@ -57,9 +58,10 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
     var method;
     var sort = "Most Liked";
 
-    if (typeof req.body.sort != 'undefined')
+    if (sortmethod != "default")
     {
-        sort = req.body.sort;
+        sort = sortmethod;
+        sortmethod = "default";
     }
 
     if (sort == "Most Liked") {
@@ -85,9 +87,10 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
     var method;
     var sort = "Newest";
 
-    if (typeof req.body.sort != 'undefined')
+    if (sortmethod != "default")
     {
-        sort = req.body.sort;
+        sort = sortmethod;
+        sortmethod = "default";
     }
 
     if (sort == "Most Liked") {
@@ -114,9 +117,10 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
     var method;
     var sort = "Newest";
 
-    if (typeof req.body.sort != 'undefined')
+    if (sortmethod != "default")
     {
-        sort = req.body.sort;
+        sort = sortmethod;
+        sortmethod = "default";
     }
 
     if (sort == "Most Liked") {
@@ -127,7 +131,7 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
     
     getMetaphors({likedBy: req.user._id}, method).then(function(metaphors) {
         res.render("myprofile", {
-            page: "myprofile",
+            page: "myprofilelikes",
             name: req.user.name,
             username: req.user.username,
             id: req.user._id.toHexString(),
@@ -137,6 +141,13 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
             sortmethod: sort
         });
     });
+});
+
+router.put('/sort/:sortmethod', (req,res) => {
+    console.log("sortmethod: " + req.params.sortmethod);
+    sortmethod = req.params.sortmethod;
+
+    res.send("Sort method updated to " + sortmethod);
 });
 
 
