@@ -41,7 +41,7 @@ router.post('/add', (req,res,next)=>{
         author: req.user.username,
         likeCount: 0,
         dislikeCount: 0
-    } );
+    });
 
   	// After you create/get an object using the model, you must call the model's methods to actually interact with the database
 

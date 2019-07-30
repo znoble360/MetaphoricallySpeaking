@@ -65,6 +65,49 @@ function loginMessage()
     window.location.href = "/please-log-in";
 }
 
+// edit-modal show event handler
+$('#edit-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var text = button.data('text'); // Extract info from data-* attributes
+    var explanation = button.data('explanation');
+    var metaid = button.data('metaid');
+    var modal = $(this);
+
+    modal.find('#edit-text').val(text);
+    modal.find('#edit-explanation').val(explanation);
+
+    $('#save-changes-button').on('click', function (event) {
+        var text = $("#edit-text").val();
+        var exp = $("#edit-explanation").val();
+
+        const body = "text=" + text + "&explanation=" + exp + "&id=" + metaid;
+        const payload = body.replace(/ /g, "+");
+
+        $('#edit-modal').modal('toggle');
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                window.location.href = "/dashboard";
+            }
+        };
+
+        xhr.open("PUT", "/metaphors/edit", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(payload);
+    });
+});
+
+
+
+
+function cancelEdit()
+{
+    $('#edit-modal').modal('toggle');
+}
+
 $('.btn-vote.btn-like.btn-vote-allow').on('click', function(){
     const element = $(this);
     var likeCount = parseInt(element.next().html());
