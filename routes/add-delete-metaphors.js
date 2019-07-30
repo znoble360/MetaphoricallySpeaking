@@ -72,14 +72,6 @@ router.post('/add', (req,res,next)=>{
 // localhost:3000/delete/3
 router.delete('/delete/:id', (req,res,next)=>{
 
-  Metaphor.find( {}, "id text explanation", function( error, records ){
-    if( error ){
-      console.log( error );
-    } else {
-      console.log( "All metaphors: ", records );
-    }
-  } );
-
   // To get the data sent with the request, you must use...
   // body parameters: req.body
   // query string: req.query
@@ -92,15 +84,16 @@ router.delete('/delete/:id', (req,res,next)=>{
   // NOTE:
   // 1. The automatically generated metaphor id field is "_id", NOT just "id"
   // 2. In order to translate a plain number to an _id, you need to call ObjectId()
+  
   Metaphor.deleteOne( { "_id": mongoose.Types.ObjectId(req.params.id) }, function( error ){
     if( error ){
       console.log( error );
       res.send( error );
     } else {
-      console.log( "Deleting metaphor with id " + req.params.id );
-      res.send( "Deleting metaphor with id " + req.params.id );
+      console.log( "Metaphor deleted successfully" );
+      res.send( "Metaphor deleted successfully" );
     }
-  } );
+  });
 
 });
 

@@ -31,7 +31,7 @@ function postMetaphor()
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(xhr.responseText);
-            window.location.href = "/dashboard";
+            location.reload();
         }
     };
 
@@ -90,7 +90,7 @@ $('#edit-modal').on('show.bs.modal', function (event) {
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 console.log(xhr.responseText);
-                window.location.href = "/dashboard";
+                location.reload();
             }
         };
 
@@ -100,8 +100,31 @@ $('#edit-modal').on('show.bs.modal', function (event) {
     });
 });
 
+$('#delete-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var metaid = button.data('metaid'); // Extract info from data-* attributes
 
+    $('#delete-metaphor-button').on('click', function (event) {
 
+        $('#delete-modal').modal('toggle');
+    
+        console.log("metaid: " + metaid);
+    
+        var xhr = new XMLHttpRequest();
+    
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+    
+        xhr.open("DELETE", "/metaphors/delete/" + metaid, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+    });
+    
+});
 
 function cancelEdit()
 {
