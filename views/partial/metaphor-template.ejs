@@ -1,4 +1,22 @@
-<% if (metaphor.length <= 0) { %>
+<script>
+  function likeRequest(metaphorId,userId){
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+
+        }
+    };
+console.log(metaphorId,userId);
+    xhr.open("PUT", "metaphors/like/"+metaphorId+"/"+userId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+  }
+</script>
+
+<% if
+(metaphor.length <= 0) { %>
     <h4 class="text-center">Looks like there are no posts yet :(</h2>
 <% } %>
 
@@ -37,12 +55,12 @@
                             </div>
                         </div>
                     </div>
-                    
+
 
                 </div>
 
                 <p class="card-text text-left"><%= meta.explanation %></p>
-                      
+
             </div>
             <div class="card-footer d-flex metaphor-footer">
                 <span class="text-muted mr-auto d-flex">
@@ -53,12 +71,12 @@
                         <p class="dislike-count"><%= meta.dislikeCount %></p>
                     <% } %>
                     <% if (id != null) { %>
-                        <button class="btn-vote btn-like btn-vote-allow px-0"></button>
+                        <button class="btn-vote btn-like btn-vote-allow px-0"onclick="likeRequest('<%=meta._id%>','<%=id%>')"></button>
                         <p class="like-count"><%= meta.likeCount.toString() %></p>
                         <button class="btn-vote btn-dislike btn-vote-allow px-0 ml-2"></button>
                         <p class="dislike-count"><%= meta.dislikeCount.toString() %></p>
                     <% } %>
-                    
+<%console.log(meta)%>
                 </span>
                 <span class="text-muted ml-auto">Posted <%= meta.time %> by <a href="#"><%= meta.author %></a></span>
             </div>

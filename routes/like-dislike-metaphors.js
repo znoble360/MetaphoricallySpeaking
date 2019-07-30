@@ -16,7 +16,7 @@ const Metaphor = require('../models/metaphor');
 // NOTE: The user will request this route when they click a "Like" button
 router.put('/like/:metaphorId/:userId', (req,res,next)=>{
 
-  	Metaphor.find( { _id: req.params.metaphorId }, "text explanation likedBy dislikedBy", function( error, records ){
+  	Metaphor.find( { _id: req.params.metaphorId }, "text explanation likedBy dislikedBy likeCount dislikeCount", function( error, records ){
       if( error ){
        	console.log( error );
       } else {
@@ -36,7 +36,7 @@ router.put('/like/:metaphorId/:userId', (req,res,next)=>{
         metaphor.save( function( error ){
           // NOTE: This code runs after the saving is complete
 
-          Metaphor.find( { }, "text explanation likedBy dislikedBy", function( error, records ){
+          Metaphor.find( { }, "text explanation likedBy dislikedBy likeCount dislikeCount", function( error, records ){
             if( error ){
               console.log( error );
             } else {
@@ -64,7 +64,7 @@ router.put('/like/:metaphorId/:userId', (req,res,next)=>{
 // NOTE: The user will request this route when they click a "Dislike" button
 router.put('/dislike/:metaphorId/:userId', (req,res,next)=>{
 
-  	Metaphor.find( { _id: req.params.metaphorId }, "text explanation likedBy dislikedBy", function( error, records ){
+  	Metaphor.find( { _id: req.params.metaphorId }, "text explanation likedBy dislikedBy likeCount dislikeCount", function( error, records ){
       if( error ){
        	console.log( error );
       } else {
