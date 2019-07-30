@@ -130,3 +130,18 @@ $('.btn-vote.btn-dislike.btn-vote-allow').on('click', function(){
         element.prev().html(likeCount);
     };
 });
+
+function voteRequest(metaid, userid, vote){
+    var xhr = new XMLHttpRequest();
+  
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+  
+        }
+    };
+  
+    xhr.open("PUT", "metaphors/" + vote + "/"+ metaid +"/"+ userid, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+}

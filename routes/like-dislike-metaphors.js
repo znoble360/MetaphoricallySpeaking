@@ -15,6 +15,7 @@ const Metaphor = require('../models/metaphor');
 // localhost:3000/metaphor/like/3/5
 // NOTE: The user will request this route when they click a "Like" button
 router.put('/like/:metaphorId/:userId', (req,res,next)=>{
+    var msg = "liked";
 
   	Metaphor.find( { _id: req.params.metaphorId }, "text explanation likedBy dislikedBy likeCount dislikeCount", function( error, records ){
       if( error ){
@@ -25,12 +26,17 @@ router.put('/like/:metaphorId/:userId', (req,res,next)=>{
         if( metaphor.likedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == false ){
           metaphor.likedBy.push( mongoose.Types.ObjectId( req.params.userId ) );
           metaphor.likeCount++;
+        } else if( metaphor.likedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == true ){
+          let index = metaphor.likedBy.indexOf( mongoose.Types.ObjectId( req.params.userId ) );
+          metaphor.likedBy.splice( index, 1 );
+          metaphor.likeCount--;
+          msg = "unliked";
         }
 
         if( metaphor.dislikedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == true ){
         	let index = metaphor.dislikedBy.indexOf( mongoose.Types.ObjectId( req.params.userId ) );
             metaphor.dislikedBy.splice( index, 1 );
-            metaphor.dislikeCount --;
+            metaphor.dislikeCount--;
         }
 
         metaphor.save( function( error ){
@@ -48,8 +54,8 @@ router.put('/like/:metaphorId/:userId', (req,res,next)=>{
             console.log( error );
             res.send( error );
           } else {
-            console.log( "Metaphor liked successfully!" );
-            res.send( "Metaphor liked successfully!" );
+            console.log( "Metaphor " + msg + " successfully!" );
+            res.send( "Metaphor " + msg + " successfully!" );
           }
 
         } );
@@ -63,6 +69,7 @@ router.put('/like/:metaphorId/:userId', (req,res,next)=>{
 // localhost:3000/metaphor/dislike/3/5
 // NOTE: The user will request this route when they click a "Dislike" button
 router.put('/dislike/:metaphorId/:userId', (req,res,next)=>{
+  var msg = "disliked";
 
   	Metaphor.find( { _id: req.params.metaphorId }, "text explanation likedBy dislikedBy likeCount dislikeCount", function( error, records ){
       if( error ){
@@ -73,6 +80,11 @@ router.put('/dislike/:metaphorId/:userId', (req,res,next)=>{
         if( metaphor.dislikedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == false ){
           metaphor.dislikedBy.push( mongoose.Types.ObjectId( req.params.userId ) );
           metaphor.dislikeCount++;
+        } else if( metaphor.dislikedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == true ){
+        	let index = metaphor.dislikedBy.indexOf( mongoose.Types.ObjectId( req.params.userId ) );
+            metaphor.dislikedBy.splice( index, 1 );
+            metaphor.dislikeCount--;
+            msg = "un-disliked";
         }
 
         if( metaphor.likedBy.includes( mongoose.Types.ObjectId( req.params.userId ) ) == true ){
@@ -96,8 +108,8 @@ router.put('/dislike/:metaphorId/:userId', (req,res,next)=>{
             console.log( error );
             res.send( error );
           } else {
-            console.log( "Metaphor disliked successfully!" );
-            res.send( "Metaphor disliked successfully!" );
+            console.log( "Metaphor " + msg + " successfully!" );
+            res.send( "Metaphor " + msg + " successfully!" );
           }
 
         } );
