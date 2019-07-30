@@ -34,3 +34,18 @@ router.put('/edit', (req, res) => {
     });
 });
 module.exports = router;
+
+router.put('/report',(req,res)=>{
+
+  Metaphor.updateOne( {"_id": mongoose.Types.ObjectId(req.body.id)}, {report: req.body.report}, function(error){
+
+      if(err)throw err;
+      else{
+        console.log("Reported the metaphor");
+      }
+
+
+  });
+
+
+});

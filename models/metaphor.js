@@ -11,7 +11,7 @@ let MetaphorSchema = new mongoose.Schema( {
   time : { type : Date, default: Date.now },
   authorID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   author: {type: mongoose.Schema.Types.String, ref: 'User'},
-  report: {type: [mongoose.SchemaTypes.String, ref], ref: 'Report'}
+  report: {type: [String]}
 } );
 
 const MetaphorModel = mongoose.model('Metaphor', MetaphorSchema);
