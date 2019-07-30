@@ -45,8 +45,18 @@ $("#search-form").submit( (e)=> {
     const searchString = $('#search-string').val();
     $('#search-string').val("");
 
-    window.location.href = "/search/search?searchString=" + searchString;
+    window.location.href = "/search/search?searchString=" + searchString + "&sort=Most+Liked";
 });
+
+function changeSearchSort(sort, search)
+{
+    window.location.href = "/search/search?searchString=" + search + "&sort=" + sort;
+}
+
+function changeSortMethod(sort)
+{
+    
+}
 
 
 
