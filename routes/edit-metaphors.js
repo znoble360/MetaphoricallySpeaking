@@ -15,7 +15,7 @@ const Metaphor = require('../models/metaphor');
 // router.put (Update)
 // router.delete (Delete)
 
-// localhost:3000/delete/3
+// localhost:3000/delete
 
 router.put('/edit', (req, res) => {
     console.log("req: " + req);
