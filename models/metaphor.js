@@ -10,7 +10,8 @@ let MetaphorSchema = new mongoose.Schema( {
   dislikeCount: { type: Number },
   time : { type : Date, default: Date.now },
   authorID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  author: {type: mongoose.Schema.Types.String, ref: 'User'}
+  author: {type: mongoose.Schema.Types.String, ref: 'User'},
+  report: {type: [mongoose.SchemaTypes.String, ref], ref: 'Report'}
 } );
 
 const MetaphorModel = mongoose.model('Metaphor', MetaphorSchema);
