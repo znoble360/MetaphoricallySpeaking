@@ -134,28 +134,28 @@ searchApp = function (request, response){
 		
 		//sets the result of the query to a return variable
 		if(textResult != null){
-			returnArray.push(textResult);				
+			returnArray = returnArray.concat(textResult);				
 		}
 	
 		//if a post ID was input, it will find that and push it onto the return array
 		Metaphor.find({_id: searchString}).exec(function (err, metaIDResult){
 			
 			if(metaIDResult != null){
-				returnArray.push(metaIDResult);
+				returnArray = returnArray.concat(metaIDResult);
 			}
 			
 			//searches for the author by ID
 			Metaphor.find({authorID: searchString}).exec(function (err, authIDResult){
 				
 				if(authIDResult != null){
-					returnArray.push(authIDResult);
+					returnArray = returnArray.concat(authIDResult);
 				}
 				
 				//searches for the author by name
 				Metaphor.find({author: searchString}).exec(function (err,authorResult){
 					
 					if(authorResult != null){
-						returnArray.push(authorResult);
+						returnArray = returnArray.concat(authorResult);
 					}
 					
 					//sends a json object with the results of the search
