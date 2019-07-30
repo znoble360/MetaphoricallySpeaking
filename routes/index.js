@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
-const temp = "5d2e39fbd4ffb0000462dfcd";
+const sortByNew = {time : -1};
+const sortByLikes = {likeCount : -1};
+var sortmethod = "default";
 
 //finds all the metaphors in the database
 var getMetaphors = function(query, sort) {
@@ -18,14 +20,30 @@ var getMetaphors = function(query, sort) {
 
 //welcome page
 router.get('/', (req,res)=> {
-    getMetaphors(null, {likeCount : -1}).then(function(metaphors) {
+    var method;
+    var sort = "Most Liked";
+
+    if (sortmethod != "default")
+    {
+        sort = sortmethod;
+        sortmethod = "default";
+    }
+
+    if (sort == "Most Liked") {
+        method = sortByLikes;
+    } else if (sort == "Newest") {
+        method = sortByNew;
+    }
+
+    getMetaphors(null, method).then(function(metaphors) {
         res.render("welcome", {
             page: "welcome",
             id: null,
             name: null,
             username: null,
             email: null,
-            metaphor: metaphors
+            metaphor: metaphors,
+            sortmethod: sort
         });
     });
 });
@@ -37,22 +55,51 @@ router.get('/please-log-in', (req,res)=> {
 
 
 router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
-    getMetaphors(null, {likeCount : -1}).then(function(metaphors) {
+    var method;
+    var sort = "Most Liked";
+
+    if (sortmethod != "default")
+    {
+        sort = sortmethod;
+        sortmethod = "default";
+    }
+
+    if (sort == "Most Liked") {
+        method = sortByLikes;
+    } else if (sort == "Newest") {
+        method = sortByNew;
+    }
+
+    getMetaphors(null, method).then(function(metaphors) {
         res.render("dashboard", {
             page: "dashboard",
             name: req.user.name,
             username: req.user.username,
             id: req.user._id.toHexString(),
             email: req.user.email,
-            metaphor: metaphors
+            metaphor: metaphors,
+            sortmethod: sort
         });
     });  
 });
 
 router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
+    var method;
+    var sort = "Newest";
 
-    console.log("myprof id: " + req.user._id);
-    getMetaphors({authorID: req.user._id}, {time : -1}).then(function(metaphors) {
+    if (sortmethod != "default")
+    {
+        sort = sortmethod;
+        sortmethod = "default";
+    }
+
+    if (sort == "Most Liked") {
+        method = sortByLikes;
+    } else if (sort == "Newest") {
+        method = sortByNew;
+    }
+    
+    getMetaphors({authorID: req.user._id}, method).then(function(metaphors) {
         res.render("myprofile", {
             page: "myprofile",
             name: req.user.name,
@@ -60,25 +107,47 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
             id: req.user._id.toHexString(),
             email: req.user.email,
             metaphor: metaphors,
-            display: "posts"
+            display: "posts",
+            sortmethod: sort
         });
     });
 });
 
 router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
+    var method;
+    var sort = "Newest";
 
+    if (sortmethod != "default")
+    {
+        sort = sortmethod;
+        sortmethod = "default";
+    }
+
+    if (sort == "Most Liked") {
+        method = sortByLikes;
+    } else if (sort == "Newest") {
+        method = sortByNew;
+    }
     
-    getMetaphors({likedBy: req.user._id}, {time : -1}).then(function(metaphors) {
+    getMetaphors({likedBy: req.user._id}, method).then(function(metaphors) {
         res.render("myprofile", {
-            page: "myprofile",
+            page: "myprofilelikes",
             name: req.user.name,
             username: req.user.username,
             id: req.user._id.toHexString(),
             email: req.user.email,
             metaphor: metaphors,
-            display: "likes"
+            display: "likes",
+            sortmethod: sort
         });
     });
+});
+
+router.put('/sort/:sortmethod', (req,res) => {
+    console.log("sortmethod: " + req.params.sortmethod);
+    sortmethod = req.params.sortmethod;
+
+    res.send("Sort method updated to " + sortmethod);
 });
 
 

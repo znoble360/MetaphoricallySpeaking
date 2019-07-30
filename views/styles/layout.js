@@ -31,7 +31,7 @@ function postMetaphor()
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(xhr.responseText);
-            window.location.href = "/dashboard";
+            location.reload();
         }
     };
 
@@ -45,8 +45,42 @@ $("#search-form").submit( (e)=> {
     const searchString = $('#search-string').val();
     $('#search-string').val("");
 
-    window.location.href = "/search/search?searchString=" + searchString;
+    window.location.href = "/search/search?searchString=" + searchString + "&sort=Most+Liked";
 });
+
+function changeSearchSort(sort)
+{    
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+            location.reload();
+        }
+    };
+
+    xhr.open("PUT", "/search/sort/" + sort, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+}
+
+function changeSortMethod(sort)
+{
+    const url = "/sort/" + sort;
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhr.responseText);
+            location.reload();
+        }
+    };
+
+    xhr.open("PUT", url, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+}
 
 
 
@@ -63,6 +97,70 @@ function report()
 function loginMessage()
 {
     window.location.href = "/please-log-in";
+}
+
+// edit-modal show event handler
+$('#edit-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var text = button.data('text'); // Extract info from data-* attributes
+    var explanation = button.data('explanation');
+    var metaid = button.data('metaid');
+    var modal = $(this);
+
+    modal.find('#edit-text').val(text);
+    modal.find('#edit-explanation').val(explanation);
+
+    $('#save-changes-button').on('click', function (event) {
+        var text = $("#edit-text").val();
+        var exp = $("#edit-explanation").val();
+
+        const body = "text=" + text + "&explanation=" + exp + "&id=" + metaid;
+        const payload = body.replace(/ /g, "+");
+
+        $('#edit-modal').modal('toggle');
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.open("PUT", "/metaphors/edit", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(payload);
+    });
+});
+
+$('#delete-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var metaid = button.data('metaid'); // Extract info from data-* attributes
+
+    $('#delete-metaphor-button').on('click', function (event) {
+
+        $('#delete-modal').modal('toggle');
+    
+        var xhr = new XMLHttpRequest();
+    
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+    
+        xhr.open("DELETE", "/metaphors/delete/" + metaid, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+    });
+    
+});
+
+function cancelEdit()
+{
+    $('#edit-modal').modal('toggle');
 }
 
 $('.btn-vote.btn-like.btn-vote-allow').on('click', function(){

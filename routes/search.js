@@ -8,6 +8,7 @@ const { ensureAuthenticated } = require('../config/auth');
 
 //gets metaphor model
 const Metaphor = require('../models/metaphor');
+var sortmethod = "default";
 
 
 var search = function (request, response){
@@ -45,12 +46,26 @@ var search = function (request, response){
 betterSearch = function (request, response){
 	//gets string from request
 	const searchString = request.query.searchString;
+	var sort = "Most Liked";
+	var method;
+
+	if (sortmethod != "default")
+	{
+		sort = sortmethod;
+		sortmethod = "default";
+	}
+	
+	if (sort == "Most Liked") {
+		method = {likeCount : -1};
+	} else if (sort == "Newest") {
+		method = {time : -1};
+	}
 	
 	var returnArray = [];
 	
 	//uses a regular expression shortcut to query exactly what we need, and saves it in an array
 	//also specifies that the result must be sorted by likeCount
-	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort({likeCount : -1}).exec(function (err, textResult){
+	Metaphor.find({text: {$regex: searchString, $options: "$i", } }).sort(method).exec(function (err, textResult){
 		
 		//sets the result of the query to a return variable
 		if(textResult != null){
@@ -58,19 +73,19 @@ betterSearch = function (request, response){
 		}
 	
 		//if a post ID was input, it will find that and push it onto the return array
-		Metaphor.find({_id: searchString}).exec(function (err, metaIDResult){
+		Metaphor.find({_id: searchString}).sort(method).exec(function (err, metaIDResult){
 			
 			if(metaIDResult != null){
 				returnArray = returnArray.concat(metaIDResult);
 			}
 			
-			Metaphor.find({authorID: searchString}).exec(function (err, authIDResult){
+			Metaphor.find({authorID: searchString}).sort(method).exec(function (err, authIDResult){
 				
 				if(authIDResult != null){
 					returnArray = returnArray.concat(authIDResult);
 				}
 				
-				Metaphor.find({author: searchString}).exec(function (err,authorResult){
+				Metaphor.find({author: searchString}).sort(method).exec(function (err,authorResult){
 					
 					if(authorResult != null){
 						returnArray = returnArray.concat(authorResult);
@@ -84,7 +99,8 @@ betterSearch = function (request, response){
 						name: request.user.name,
 						id: request.user._id,
 						email: request.user.email,
-						metaphor: returnArray
+						metaphor: returnArray,
+						sortmethod: sort
 						});
 					} else {
 						response.render("searchresults", {
@@ -93,7 +109,8 @@ betterSearch = function (request, response){
 						name: null,
 						id: null,
 						email: null,
-						metaphor: returnArray
+						metaphor: returnArray,
+						sortmethod: sort
 						});
 					}
 				
@@ -151,6 +168,11 @@ searchApp = function (request, response){
 	});
 }
 
+router.put('/sort/:sortmethod', (req,res) => {
+    sortmethod = req.params.sortmethod;
+    
+    res.send("Sort method updated to " + sortmethod);
+});
 
 router.get('/search', betterSearch);
 

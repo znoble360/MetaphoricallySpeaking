@@ -33,8 +33,8 @@
                                     <% } %>
                                 <% } %>
                                 <% if (meta.authorID == id) { %>
-                                    <button class="dropdown-item" data-toggle="modal" data-target="#edit-modal">Edit</button>
-                                    <button class="dropdown-item" data-toggle="modal" data-target="#delete-modal">Delete</button>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#edit-modal" data-text="<%= meta.text %>" data-explanation="<%= meta.explanation %>" data-metaid="<%= meta._id %>">Edit</button>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#delete-modal" data-metaid="<%= meta._id %>">Delete</button>
                                 <% } %>
                             </div>
                         </div>
