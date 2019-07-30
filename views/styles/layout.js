@@ -239,7 +239,7 @@ function voteRequest(metaid, userid, vote){
         }
     };
   
-    xhr.open("PUT", "metaphors/" + vote + "/"+ metaid +"/"+ userid, true);
+    xhr.open("PUT", "/metaphors/" + vote + "/"+ metaid +"/"+ userid, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send();
 }
