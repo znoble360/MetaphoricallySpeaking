@@ -18,7 +18,33 @@ var setClasses = function(metaphors, id) {
             meta.class = "metaphor-disliked";
         } else {
             meta.class = "metaphor-default";
-        }
+		}
+		
+		var timeElapsed = Date.now() - meta.time.getTime();
+        var seconds = Math.floor(timeElapsed/1000);
+        var minutes = Math.floor(timeElapsed/60000);
+        var hours = Math.floor(timeElapsed/3600000);
+        var days = Math.floor(timeElapsed/86400000);
+        var weeks = Math.floor(timeElapsed/604800000);
+        var months = Math.floor(timeElapsed/2592000000);
+        var years = Math.floor(timeElapsed/31536000000);
+
+        if (seconds < 1)
+            meta.timestring = "Now";
+        else if (seconds < 60)
+            meta.timestring = seconds + "s";
+        else if (minutes < 60)
+            meta.timestring = minutes + "m";
+        else if (hours < 24)
+            meta.timestring = hours + "h";
+        else if (days < 7)
+            meta.timestring = days + "d";
+        else if (days < 30)
+            meta.timestring = weeks + "w";
+        else if (days < 365)
+            meta.timestring = months + " month" + (months == 1 ? "" : "s");
+        else
+            meta.timestring = years + " year";
     });
 }
 
