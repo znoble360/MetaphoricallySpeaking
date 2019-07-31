@@ -70,16 +70,22 @@ const getUser = function(search) {
 }
 
 var sortmethod = "default";
+var welcomeSort = "default";
+var dashboardSort = "default";
+var myprofileSort = "default";
+var userSort = "default";
 
 //welcome page
 router.get('/', (req,res)=> {
     var method;
     var sort = "Most Liked";
 
-    if (sortmethod != "default")
-    {
+    if (sortmethod != "default") {
         sort = sortmethod;
+        welcomeSort = sortmethod;
         sortmethod = "default";
+    } else if (welcomeSort != "default") {
+        sort = welcomeSort;
     }
 
     if (sort == "Most Liked") {
@@ -114,10 +120,12 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
     var method;
     var sort = "Most Liked";
 
-    if (sortmethod != "default")
-    {
+    if (sortmethod != "default") {
         sort = sortmethod;
+        dashboardSort = sortmethod;
         sortmethod = "default";
+    } else if (dashboardSort != "default") {
+        sort = dashboardSort;
     }
 
     if (sort == "Most Liked") {
@@ -144,10 +152,12 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
     var method;
     var sort = "Newest";
 
-    if (sortmethod != "default")
-    {
+    if (sortmethod != "default") {
         sort = sortmethod;
+        myprofileSort = sortmethod;
         sortmethod = "default";
+    } else if (myprofileSort != "default") {
+        sort = myprofileSort;
     }
 
     if (sort == "Most Liked") {
@@ -175,10 +185,12 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
     var method;
     var sort = "Newest";
 
-    if (sortmethod != "default")
-    {
+    if (sortmethod != "default") {
         sort = sortmethod;
+        myprofileSort = sortmethod;
         sortmethod = "default";
+    } else if (myprofileSort != "default") {
+        sort = myprofileSort;
     }
 
     if (sort == "Most Liked") {
@@ -212,10 +224,12 @@ router.get('/user/:username', (req,res)=> {
     var method;
     var sort = "Newest";
 
-    if (sortmethod != "default")
-    {
+    if (sortmethod != "default") {
         sort = sortmethod;
+        userSort = sortmethod;
         sortmethod = "default";
+    } else if (userSort != "default") {
+        sort = userSort;
     }
 
     if (sort == "Most Liked") {
@@ -285,10 +299,12 @@ router.get('/user/:username/likes', (req,res)=> {
     var method;
     var sort = "Newest";
 
-    if (sortmethod != "default")
-    {
+    if (sortmethod != "default") {
         sort = sortmethod;
+        userSort = sortmethod;
         sortmethod = "default";
+    } else if (userSort != "default") {
+        sort = userSort;
     }
 
     if (sort == "Most Liked") {
