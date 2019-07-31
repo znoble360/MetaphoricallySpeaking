@@ -217,6 +217,10 @@ $('#settings-modal').on('show.bs.modal', function (event) {
     usernameField.val(username);
     emailField.val(email);
 
+    closeBtn.on('click', function(event) {
+        location.reload();
+    });
+
     XBtn.on('click', function(event) {
         if (saveBtn.is(":visible")) {
             saveBtn.hide();
@@ -240,7 +244,12 @@ $('#settings-modal').on('show.bs.modal', function (event) {
             emailField.attr({'disabled': 'disabled'});
         }
 
+        $('#settings-warning-text').html("");
+        $('#settings-success-text').html("");
+
         modal.modal('toggle');
+
+        location.reload();
     });
 
     editBtn.on('click', function (event) {
@@ -265,10 +274,29 @@ $('#settings-modal').on('show.bs.modal', function (event) {
 
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log(xhr.responseText);
-                    //location.reload();
+                    var response = JSON.parse(xhr.response);
+                    if (!response.success) {
+                        $('#settings-success-text').html("");
+                        if (response.error != "Error")
+                            $('#settings-warning-text').html(response.error + ' already in use');
+                        else
+                            $('#settings-warning-text').html(response.error);
+                    } else {
+                        $('#settings-warning-text').html("");
+                        $('#settings-success-text').html("Changes saved");
+
+                        nameField.attr({'disabled': 'disabled'});
+                        usernameField.attr({'disabled': 'disabled'});
+                        emailField.attr({'disabled': 'disabled'});
+
+
+                        saveBtn.hide();
+                        cancelBtn.hide();
+                        closeBtn.show();
+                        editBtn.show();
+                    }
                 }
-            };
+            }
 
             xhr.open("PUT", "/users/edit", true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -288,6 +316,9 @@ $('#settings-modal').on('show.bs.modal', function (event) {
             nameField.attr({'disabled': 'disabled'});
             usernameField.attr({'disabled': 'disabled'});
             emailField.attr({'disabled': 'disabled'});
+
+            $('#settings-warning-text').html("");
+            $('#settings-success-text').html("");
         });
 
         

@@ -8,46 +8,71 @@ const { ensureAuthenticated } = require('../config/auth');
 
 //gets metaphor model
 const Metaphor = require('../models/metaphor');
+const User = require('../models/user');
 var sortmethod = "default";
 
-var setClasses = function(metaphors, id) {
-    metaphors.forEach( (meta) => {
-        if (meta.likedBy.includes(id)) {
-            meta.class = "metaphor-liked";
-        } else if (meta.dislikedBy.includes(id)) {
-            meta.class = "metaphor-disliked";
-        } else {
-            meta.class = "metaphor-default";
-		}
-		
-		var timeElapsed = Date.now() - meta.time.getTime();
-        var seconds = Math.floor(timeElapsed/1000);
-        var minutes = Math.floor(timeElapsed/60000);
-        var hours = Math.floor(timeElapsed/3600000);
-        var days = Math.floor(timeElapsed/86400000);
-        var weeks = Math.floor(timeElapsed/604800000);
-        var months = Math.floor(timeElapsed/2592000000);
-        var years = Math.floor(timeElapsed/31536000000);
+const getAuthor = function(authorID) {
+    return new Promise(function(resolve, reject) {
+        User.findOne({_id: authorID}).then(function(user) {
+            if (user) {
+                resolve(user);
+            } else {
 
-        if (seconds < 1)
-            meta.timestring = "Now";
-        else if (seconds < 60)
-            meta.timestring = seconds + "s";
-        else if (minutes < 60)
-            meta.timestring = minutes + "m";
-        else if (hours < 24)
-            meta.timestring = hours + "h";
-        else if (days < 7)
-            meta.timestring = days + "d";
-        else if (days < 30)
-            meta.timestring = weeks + "w";
-        else if (days < 365)
-            meta.timestring = months + " month" + (months == 1 ? "" : "s");
-        else
-            meta.timestring = years + " year";
+            }
+        });
     });
 }
 
+const setClasses = function(metaphors, id) {
+    return new Promise(function(resolve, reject) {
+        var i = 0;
+
+        metaphors.forEach( (meta) => {
+            getAuthor(meta.authorID).then(function(user){
+                i++;
+                meta.author = user.username;
+                meta.class = "";
+
+                if (meta.likedBy.includes(id)) {
+                    meta.class = "metaphor-liked";
+                } else if (meta.dislikedBy.includes(id)) {
+                    meta.class = "metaphor-disliked";
+                } else {
+                    meta.class = "metaphor-default";
+                }
+            
+                var timeElapsed = Date.now() - meta.time.getTime();
+                var seconds = Math.floor(timeElapsed/1000);
+                var minutes = Math.floor(timeElapsed/60000);
+                var hours = Math.floor(timeElapsed/3600000);
+                var days = Math.floor(timeElapsed/86400000);
+                var weeks = Math.floor(timeElapsed/604800000);
+                var months = Math.floor(timeElapsed/2592000000);
+                var years = Math.floor(timeElapsed/31536000000);
+        
+                if (seconds < 1)
+                    meta.timestring = "Now";
+                else if (seconds < 60)
+                    meta.timestring = seconds + "s";
+                else if (minutes < 60)
+                    meta.timestring = minutes + "m";
+                else if (hours < 24)
+                    meta.timestring = hours + "h";
+                else if (days < 7)
+                    meta.timestring = days + "d";
+                else if (days < 30)
+                    meta.timestring = weeks + "w";
+                else if (days < 365)
+                    meta.timestring = months + " month" + (months == 1 ? "" : "s");
+                else
+                    meta.timestring = years + " year";
+
+                if (i == metaphors.length)
+                    resolve();
+            });   
+        });
+    });
+}
 
 var search = function (request, response){
 	//gets string from request
@@ -131,30 +156,32 @@ betterSearch = function (request, response){
 					
 					// redirects to page with credentials if user is logged in					
 					if (request.isAuthenticated()) {
-						setClasses(returnArray, request.user._id);
-						response.render("searchresults", {
-						page: "searchresults",
-						search: searchString,
-						name: request.user.name,
-						id: request.user._id,
-						email: request.user.email,
-						metaphor: returnArray,
-						sortmethod: sort
+						setClasses(returnArray, request.user._id).then(function(){
+							response.render("searchresults", {
+								page: "searchresults",
+								search: searchString,
+								name: request.user.name,
+								id: request.user._id,
+								email: request.user.email,
+								username: request.user.username,
+								metaphor: returnArray,
+								sortmethod: sort
+							});
 						});
 					} else {
-						setClasses(returnArray, null);
-						response.render("searchresults", {
-						page: "searchresults",
-						search: searchString,
-						name: null,
-						id: null,
-						email: null,
-						metaphor: returnArray,
-						sortmethod: sort
+						setClasses(returnArray, null).then(function(){
+							response.render("searchresults", {
+								page: "searchresults",
+								search: searchString,
+								name: null,
+								id: null,
+								email: null,
+								username: null,
+								metaphor: returnArray,
+								sortmethod: sort
+							});
 						});
 					}
-				
-					
 				});
 			});
 		});
