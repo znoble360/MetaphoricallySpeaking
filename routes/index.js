@@ -115,6 +115,13 @@ router.get('/please-log-in', (req,res)=> {
 
 });
 
+router.get('/empty-string', (req,res)=> {
+
+    req.flash('success_msg', 'You didn\'t search for anything.');
+    res.send("Please enter a valid search query.");
+
+});
+
 
 router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
     var method;

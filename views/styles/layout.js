@@ -43,10 +43,31 @@ function postMetaphor()
 $("#search-form").submit( (e)=> {
     e.preventDefault();
     const searchString = $('#search-string').val();
+    if (searchString.replace(/ /g, "") == "")
+    {
+        emptyStringMsg();
+        return;
+    }
     $('#search-string').val("");
 
     window.location.href = "/search/search?searchString=" + searchString + "&sort=Most+Liked";
 });
+
+function emptyStringMsg()
+{
+    var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.open("GET", "/empty-string", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+}
 
 function changeSearchSort(sort)
 {    
