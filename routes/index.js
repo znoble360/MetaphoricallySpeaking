@@ -29,7 +29,7 @@ const setClasses = function(metaphors, id) {
         } else {
             meta.class = "metaphor-default";
         }
-        
+
         var timeElapsed = Date.now() - meta.time.getTime();
         var seconds = Math.floor(timeElapsed/1000);
         var minutes = Math.floor(timeElapsed/60000);
@@ -40,7 +40,7 @@ const setClasses = function(metaphors, id) {
         var years = Math.floor(timeElapsed/31536000000);
 
         if (seconds < 1)
-            meta.timestring = Now;
+            meta.timestring = "Now";
         else if (seconds < 60)
             meta.timestring = seconds + "s";
         else if (minutes < 60)
@@ -52,9 +52,9 @@ const setClasses = function(metaphors, id) {
         else if (days < 30)
             meta.timestring = weeks + "w";
         else if (days < 365)
-            meta.timestring = months + "month" + (months == 1 ? "" : "s");
+            meta.timestring = months + " month" + (months == 1 ? "" : "s");
         else
-            meta.timestring = years + "year";
+            meta.timestring = years + " year";
     });
 }
 
