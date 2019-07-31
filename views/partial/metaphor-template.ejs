@@ -60,7 +60,7 @@
                         <p class="dislike-count"><%= meta.dislikeCount.toString() %></p>
                     <% } %>
                 </span>
-                <span class="text-muted ml-auto">Posted <%= meta.time %> by <button class="user-page-button px-0 text-primary fake-a-tag" data-author="<%= meta.author %>"><%= meta.author %></button></span>
+                <span class="text-muted ml-auto"><%= meta.timestring %> &sdot; <button class="user-page-button px-0 text-primary fake-a-tag" data-author="<%= meta.author %>"><%= meta.author %></button></span>
             </div>
         </div>
     </div>
