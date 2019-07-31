@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { ensureAuthenticated } = require('../config/auth');
 
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -117,6 +118,10 @@ router.post('/register', (req,res,next)=>{
         });
     
     }
+});
+
+router.put('/edit',(ensureAuthenticated), (req,res) => {
+    const {name, username, email} = req.body;
 });
 
 //Login handle

@@ -190,6 +190,113 @@ $('#delete-modal').on('show.bs.modal', function (event) {
     
 });
 
+$('#settings-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+
+    // Extract info from data-* attributes
+    var name = button.data('name');
+    var username = button.data('username');
+    var email = button.data('email');
+
+    var modal = $(this);
+
+    var nameField = modal.find('#name-field');
+    var usernameField = modal.find('#username-field');
+    var emailField = modal.find('#email-field');
+
+    var saveBtn = modal.find('#save-settings-button');
+    var cancelBtn = modal.find('#cancel-edit-button');
+    var closeBtn = modal.find('#close-settings-button');
+    var editBtn = modal.find('#edit-settings-button');
+    var XBtn = modal.find('#x-settings-button');
+
+    saveBtn.hide();
+    cancelBtn.hide();
+
+    nameField.val(name);
+    usernameField.val(username);
+    emailField.val(email);
+
+    XBtn.on('click', function(event) {
+        if (saveBtn.is(":visible")) {
+            saveBtn.hide();
+        }
+        if (cancelBtn.is(":visible")) {
+            cancelBtn.hide();
+        }
+        if (editBtn.is(":hidden")) {
+            editBtn.show();
+        }
+        if (closeBtn.is(":hidden")) {
+            closeBtn.show();
+        }
+        if (!nameField.attr('disabled')) {
+            nameField.attr({'disabled': 'disabled'});
+        }
+        if (!usernameField.attr('disabled')) {
+            usernameField.attr({'disabled': 'disabled'});
+        }
+        if (!emailField.attr('disabled')) {
+            emailField.attr({'disabled': 'disabled'});
+        }
+
+        modal.modal('toggle');
+    });
+
+    editBtn.on('click', function (event) {
+        nameField.removeAttr('disabled');
+        usernameField.removeAttr('disabled');
+        emailField.removeAttr('disabled');
+
+        editBtn.hide();
+        closeBtn.hide();
+        saveBtn.show();
+        cancelBtn.show();
+
+        saveBtn.on('click', function(event) {
+            console.log("name: " + nameField.val());
+            console.log("username: " + usernameField.val());
+            console.log("email: " + emailField.val());
+
+            const body = "name=" + nameField.val() + "&username=" + usernameField.val() + "&email=" + emailField.val();
+            const payload = body.replace(/ /g, "+");
+
+            // var xhr = new XMLHttpRequest();
+
+            //     xhr.onreadystatechange = function() {
+            //         if (this.readyState == 4 && this.status == 200) {
+            //             console.log(xhr.responseText);
+            //             location.reload();
+            //         }
+            //     };
+
+            //     xhr.open("POST", "/metaphors/add", true);
+            //     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            //     xhr.send(payload);
+        });
+
+        cancelBtn.on('click', function(event) {
+            saveBtn.hide();
+            cancelBtn.hide();
+            closeBtn.show();
+            editBtn.show();
+
+            nameField.val(name);
+            usernameField.val(username);
+            emailField.val(email);
+
+            nameField.attr({'disabled': 'disabled'});
+            usernameField.attr({'disabled': 'disabled'});
+            emailField.attr({'disabled': 'disabled'});
+        });
+
+        
+    
+        
+    });
+    
+});
+
 function cancelEdit()
 {
     $('#edit-modal').modal('toggle');
