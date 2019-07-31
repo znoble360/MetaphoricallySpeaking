@@ -2,6 +2,7 @@
     <h4 class="text-center">Looks like there are no posts yet :(</h2>
 <% } %>
 
+
 <% metaphor.forEach((meta)=>{ %>
     <% if (typeof meta.likeCount == 'undefined') {
         meta.likeCount = 0;
@@ -9,7 +10,6 @@
     if (typeof meta.dislikeCount == 'undefined') {
         meta.dislikeCount = 0;
     }; %>
-   
     <div class="<%= meta.class %>" id="<%= meta._id %>">
         <div class="card mb-5">
             <div class="card-body">
@@ -65,3 +65,4 @@
         </div>
     </div>
 <% }); %>
+
