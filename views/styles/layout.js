@@ -43,10 +43,31 @@ function postMetaphor()
 $("#search-form").submit( (e)=> {
     e.preventDefault();
     const searchString = $('#search-string').val();
+    if (searchString.replace(/ /g, "") == "")
+    {
+        emptyStringMsg();
+        return;
+    }
     $('#search-string').val("");
 
     window.location.href = "/search/search?searchString=" + searchString + "&sort=Most+Liked";
 });
+
+function emptyStringMsg()
+{
+    var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.open("GET", "/empty-string", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+}
 
 function changeSearchSort(sort)
 {    
@@ -96,7 +117,18 @@ function report()
 
 function loginMessage()
 {
-    window.location.href = "/please-log-in";
+    var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                location.reload();
+            }
+        };
+
+        xhr.open("GET", "/please-log-in", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
 }
 
 // edit-modal show event handler
@@ -235,7 +267,6 @@ function voteRequest(metaid, userid, vote){
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(xhr.responseText);
-  
         }
     };
   
@@ -243,3 +274,10 @@ function voteRequest(metaid, userid, vote){
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send();
 }
+
+$('.user-page-button').on('click', (event) => {
+    var button = $(event.target);
+    var author = button.data('author');
+
+    window.location.href = "/user/" + author;
+});

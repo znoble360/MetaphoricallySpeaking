@@ -18,11 +18,6 @@ const Metaphor = require('../models/metaphor');
 // localhost:3000/delete
 
 router.put('/edit', (req, res) => {
-    console.log("req: " + req);
-    console.log("id: ", req.body.id);
-    console.log("text: " + req.body.text);
-    console.log("explanation: " + req.body.explanation);
-
     Metaphor.updateOne( { "_id": mongoose.Types.ObjectId(req.body.id) }, { text: req.body.text, explanation: req.body.explanation }, function( error ){
         if( error ){
           console.log( error );
