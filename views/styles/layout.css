@@ -1,6 +1,6 @@
 body
 {
-    padding-top: 11vh;
+    padding-top: 13vh;
 }
 
 .scrollbar 
@@ -24,17 +24,17 @@ body
 
 .profile-bar
 {
-    height: 7vh;
+    height: 9vh;
 }
 
 .full-browser
 {
-    height: 89vh;
+    height: 86vh;
 }
 
 .full-page
 {
-    height: 79vh;
+    height: 74vh;
 }
 
 .fake-a-tag
