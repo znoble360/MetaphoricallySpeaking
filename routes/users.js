@@ -122,6 +122,16 @@ router.post('/register', (req,res,next)=>{
 
 router.put('/edit',(ensureAuthenticated), (req,res) => {
     const {name, username, email} = req.body;
+    console.log(req.user._id);
+    console.log(req.user.name);
+    console.log(req.user.username);
+    console.log(req.user.email);
+    console.log(req.body.name);
+    console.log(req.body.username);
+    console.log(req.body.email);
+
+    // return error message or success message; don't redirect
+    res.send("epic meal time");
 });
 
 //Login handle

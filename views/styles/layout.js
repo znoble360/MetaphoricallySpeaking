@@ -261,18 +261,18 @@ $('#settings-modal').on('show.bs.modal', function (event) {
             const body = "name=" + nameField.val() + "&username=" + usernameField.val() + "&email=" + emailField.val();
             const payload = body.replace(/ /g, "+");
 
-            // var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest();
 
-            //     xhr.onreadystatechange = function() {
-            //         if (this.readyState == 4 && this.status == 200) {
-            //             console.log(xhr.responseText);
-            //             location.reload();
-            //         }
-            //     };
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(xhr.responseText);
+                    //location.reload();
+                }
+            };
 
-            //     xhr.open("POST", "/metaphors/add", true);
-            //     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            //     xhr.send(payload);
+            xhr.open("PUT", "/users/edit", true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(payload);
         });
 
         cancelBtn.on('click', function(event) {
