@@ -3,6 +3,21 @@ body
     padding-top: 100px;
 }
 
+.fake-a-tag
+{
+    background: none;
+    border: none;
+}
+
+.fake-a-tag:hover
+{
+    text-decoration: underline;
+}
+.fake-a-tag:focus
+{
+    outline: none;
+}
+
 .btn-vote
 {
     width: 20px;

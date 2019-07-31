@@ -9,10 +9,7 @@
     if (typeof meta.dislikeCount == 'undefined') {
         meta.dislikeCount = 0;
     }; %>
-
-    <% console.log("page (metaphor-template): " + page) %>
-
-    
+   
     <div class="<%= meta.class %>" id="<%= meta._id %>">
         <div class="card mb-5">
             <div class="card-body">
@@ -63,7 +60,7 @@
                         <p class="dislike-count"><%= meta.dislikeCount.toString() %></p>
                     <% } %>
                 </span>
-                <span class="text-muted ml-auto">Posted <%= meta.time %> by <a href="#"><%= meta.author %></a></span>
+                <span class="text-muted ml-auto">Posted <%= meta.time %> by <button class="user-page-button px-0 text-primary fake-a-tag" data-author="<%= meta.author %>"><%= meta.author %></button></span>
             </div>
         </div>
     </div>

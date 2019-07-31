@@ -253,3 +253,10 @@ function voteRequest(metaid, userid, vote){
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send();
 }
+
+$('.user-page-button').on('click', (event) => {
+    var button = $(event.target);
+    var author = button.data('author');
+
+    window.location.href = "/user/" + author;
+});

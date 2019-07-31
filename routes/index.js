@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
+const User = require('../models/user');
+const mongoose = require('mongoose');
+
 const sortByNew = {time : -1};
 const sortByLikes = {likeCount : -1};
-var sortmethod = "default";
 
 //finds all the metaphors in the database
-var getMetaphors = function(query, sort) {
+const getMetaphors = function(query, sort) {
     return new Promise(function(resolve, reject) {
         Metaphor.find(query).sort(sort).exec(function (err, documents){
             if (err)throw err;
@@ -18,7 +20,7 @@ var getMetaphors = function(query, sort) {
     });
 }
 
-var setClasses = function(metaphors, id) {
+const setClasses = function(metaphors, id) {
     metaphors.forEach( (meta) => {
         if (meta.likedBy.includes(id)) {
             meta.class = "metaphor-liked";
@@ -29,6 +31,19 @@ var setClasses = function(metaphors, id) {
         }
     });
 }
+
+const getUser = function(search) {
+    return new Promise(function(resolve, reject) {
+        User.find({username: search}).exec(function (err, user) {
+            if (err)throw err;
+            else {
+                resolve(user[0]);
+            }
+        });
+    });
+}
+
+var sortmethod = "default";
 
 //welcome page
 router.get('/', (req,res)=> {
@@ -159,6 +174,152 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
             sortmethod: sort
         });
     });
+});
+
+router.get('/user/:username', (req,res)=> {
+
+    if (req.isAuthenticated() && req.params.username == req.user.username)
+    {
+        res.redirect('/myprofile');
+    }
+
+    var method;
+    var sort = "Newest";
+
+    if (sortmethod != "default")
+    {
+        sort = sortmethod;
+        sortmethod = "default";
+    }
+
+    if (sort == "Most Liked") {
+        method = sortByLikes;
+    } else if (sort == "Newest") {
+        method = sortByNew;
+    }
+
+    var username = req.params.username;
+    
+    //mongoose.Types.ObjectId(userid)
+
+    getUser(username).then(function(user){
+        getMetaphors({authorID: user._id}, method).then(function(metaphors) {
+            if (req.isAuthenticated()) {
+                setClasses(metaphors, req.user._id);
+                res.render("user", {
+                    page: "user",
+    
+                    name: req.user.name,
+                    username: req.user.username,
+                    id: req.user._id.toHexString(),
+                    email: req.user.email,
+    
+                    user_name: user.name,
+                    user_username: user.username,
+                    user_id: user._id.toHexString(),
+                    user_email: user.email,
+    
+                    metaphor: metaphors,
+                    display: "posts",
+                    sortmethod: sort
+                });
+            } else {
+                setClasses(metaphors, null);
+                res.render("user", {
+                    page: "user",
+
+                    name: null,
+                    username: null,
+                    id: null,
+                    email: null,
+
+                    user_name: user.name,
+                    user_username: user.username,
+                    user_id: user._id.toHexString(),
+                    user_email: user.email,
+
+                    metaphor: metaphors,
+                    display: "posts",
+                    sortmethod: sort
+                });
+            }
+            
+        });
+    });
+    
+});
+
+router.get('/user/:username/likes', (req,res)=> {
+
+    if (req.isAuthenticated() && req.params.username == req.user.username)
+    {
+        res.redirect('/myprofile/likes');
+    }
+
+    var method;
+    var sort = "Newest";
+
+    if (sortmethod != "default")
+    {
+        sort = sortmethod;
+        sortmethod = "default";
+    }
+
+    if (sort == "Most Liked") {
+        method = sortByLikes;
+    } else if (sort == "Newest") {
+        method = sortByNew;
+    }
+
+    var username = req.params.username;
+    
+    //mongoose.Types.ObjectId(userid)
+
+    getUser(username).then(function(user){
+        getMetaphors({likedBy: user._id}, method).then(function(metaphors) {
+            if (req.isAuthenticated()) {
+                setClasses(metaphors, req.user._id);
+                res.render("user", {
+                    page: "userlikes",
+    
+                    name: req.user.name,
+                    username: req.user.username,
+                    id: req.user._id.toHexString(),
+                    email: req.user.email,
+    
+                    user_name: user.name,
+                    user_username: user.username,
+                    user_id: user._id.toHexString(),
+                    user_email: user.email,
+    
+                    metaphor: metaphors,
+                    display: "likes",
+                    sortmethod: sort
+                });
+            } else {
+                setClasses(metaphors, null);
+                res.render("user", {
+                    page: "userlikes",
+
+                    name: null,
+                    username: null,
+                    id: null,
+                    email: null,
+
+                    user_name: user.name,
+                    user_username: user.username,
+                    user_id: user._id.toHexString(),
+                    user_email: user.email,
+
+                    metaphor: metaphors,
+                    display: "likes",
+                    sortmethod: sort
+                });
+            }
+            
+        });
+    });
+    
 });
 
 router.put('/sort/:sortmethod', (req,res) => {
