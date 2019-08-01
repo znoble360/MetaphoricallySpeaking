@@ -25,6 +25,9 @@ const getAuthor = function(authorID) {
 
 const setClasses = function(metaphors, id) {
     return new Promise(function(resolve, reject) {
+		if (metaphors.length == 0)
+			resolve();
+			
         var i = 0;
 
         metaphors.forEach( (meta) => {
@@ -107,6 +110,7 @@ var search = function (request, response){
 //find a metaphor by unique ID
 
 betterSearch = function (request, response){
+	console.log("entered search");
 	//gets string from request
 	const searchString = request.query.searchString;
 	var sort = "Most Liked";
@@ -153,9 +157,10 @@ betterSearch = function (request, response){
 					if(authorResult != null){
 						returnArray = returnArray.concat(authorResult);
 					}
-					
+					console.log("search 2");
 					// redirects to page with credentials if user is logged in					
 					if (request.isAuthenticated()) {
+						console.log("search 3");
 						setClasses(returnArray, request.user._id).then(function(){
 							response.render("searchresults", {
 								page: "searchresults",
@@ -169,7 +174,9 @@ betterSearch = function (request, response){
 							});
 						});
 					} else {
+						console.log("search 4");
 						setClasses(returnArray, null).then(function(){
+							console.log("search 5");
 							response.render("searchresults", {
 								page: "searchresults",
 								search: searchString,

@@ -33,6 +33,9 @@ const getAuthor = function(authorID) {
 
 const setClasses = function(metaphors, id) {
     return new Promise(function(resolve, reject) {
+        if (metaphors.length == 0)
+            resolve();
+            
         var i = 0;
 
         metaphors.forEach( (meta) => {
