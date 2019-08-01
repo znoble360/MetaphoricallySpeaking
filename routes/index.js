@@ -119,15 +119,16 @@ router.get('/', (req,res)=> {
     }
 
     getMetaphors(null, method).then(function(metaphors) {
-        setClasses(metaphors, null);
-        res.render("welcome", {
-            page: "welcome",
-            id: null,
-            name: null,
-            username: null,
-            email: null,
-            metaphor: metaphors,
-            sortmethod: sort
+        setClasses(metaphors, null).then(function(){
+            res.render("welcome", {
+                page: "welcome",
+                id: null,
+                name: null,
+                username: null,
+                email: null,
+                metaphor: metaphors,
+                sortmethod: sort
+            });
         });
     });
 });
