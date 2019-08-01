@@ -5,5 +5,7 @@
     <string name="description">Description</string>
     <string name="url_base">https://metaphorically-speaking.herokuapp.com</string>
     <string name="search">/search/searchApp?searchString=</string>
+    <string name="date">Date</string>
+    <string name="likes">Likes</string>
 
 </resources>

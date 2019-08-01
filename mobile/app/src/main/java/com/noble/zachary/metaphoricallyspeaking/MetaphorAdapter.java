@@ -18,12 +18,17 @@ public class MetaphorAdapter extends RecyclerView.Adapter<MetaphorAdapter.Metaph
 	{
 		public TextView mMetaphorTextView;
 		public TextView mDescriptionTextView;
+		public TextView mDateTextView;
+		public TextView mLikesTextView;
 
 		public MetaphorViewHolder(View itemView)
 		{
 			super(itemView);
 			mMetaphorTextView = itemView.findViewById(R.id.metaphor);
 			mDescriptionTextView = itemView.findViewById(R.id.description);
+			mDateTextView  = itemView.findViewById(R.id.Date);
+			mLikesTextView = itemView.findViewById(R.id.likes_count);
+
 		}
 	}
 
@@ -50,6 +55,8 @@ public class MetaphorAdapter extends RecyclerView.Adapter<MetaphorAdapter.Metaph
 
 		holder.mMetaphorTextView.setText(currentItem.getMetaphor());
 		holder.mDescriptionTextView.setText(currentItem.getDescription());
+		holder.mDateTextView.setText(currentItem.getDate());
+		holder.mLikesTextView.setText(currentItem.getLikes());
 	}
 
 	// returns the number of metaphors in the list

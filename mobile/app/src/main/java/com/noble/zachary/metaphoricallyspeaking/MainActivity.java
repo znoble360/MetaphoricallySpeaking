@@ -26,7 +26,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity
@@ -58,24 +61,31 @@ public class MainActivity extends AppCompatActivity
 		    	// grab the text input
 	            String searchString = searchInput.getText().toString();
 
-	            // save the url for http request
-			    String search_url = getString(R.string.url_base) + getString(R.string.search) + searchString;
-			    String response;
+	            if (searchString.length() == 0)
+	            {
+		            Toast.makeText(MainActivity.this, "please enter a message", Toast.LENGTH_SHORT).show();
+	            }
+	            else
+	            {
+		            // save the url for http request
+		            String search_url = getString(R.string.url_base) + getString(R.string.search) + searchString;
+		            String response;
 
-			    // send the search query and display the results in a scroll view
-			    try
-			    {
-				    response = new HttpRequests().execute(search_url).get();
-					displayResults(response);
-			    }
-			    // display error if failed
-			    catch (Exception e)
-			    {
-			        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-			    }
+		            // send the search query and display the results in a scroll view
+		            try
+		            {
+			            response = new HttpRequests().execute(search_url).get();
+			            displayResults(response);
+		            }
+		            // display error if failed
+		            catch (Exception e)
+		            {
+			            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		            }
 
-			    // closes the keyboard when the search button is pressed
-			    closeKeyboard();
+		            // closes the keyboard when the search button is pressed
+		            closeKeyboard();
+	            }
 
 	        }
 	    });
@@ -97,8 +107,35 @@ public class MainActivity extends AppCompatActivity
 			    JSONObject result = JSONResults.getJSONObject(i);
 			    String metaphor = result.getString("text");
 			    String description = result.getString("explanation");
+			    String date = result.getString("time");
+			    int likes = result.getInt("likeCount") - result.getInt("dislikeCount");
 
-			    metaphorList.add(new MetaphorItem(metaphor, description));
+			    java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS'Z'");
+
+			    String finalDate = "";
+			    try
+			    {
+			    	Date newDate;
+				    newDate = formatter.parse(date);
+				    SimpleDateFormat formatNowDay = new SimpleDateFormat("dd");
+				    SimpleDateFormat formatNowMonth = new SimpleDateFormat("MM");
+				    SimpleDateFormat formatNowYear = new SimpleDateFormat("YYYY");
+
+				    String currentDay = formatNowDay.format(newDate);
+				    String currentMonth = formatNowMonth.format(newDate);
+				    String currentYear = formatNowYear.format(newDate);
+
+				    finalDate = currentMonth + "/" + currentDay + "/" + currentYear;
+			    } catch (ParseException e)
+			    {
+				    e.printStackTrace();
+			    }
+
+
+
+
+
+			    metaphorList.add(new MetaphorItem(metaphor, description, finalDate, likes));
 		    }
 
 		    // sets up the adapter to show the metaphors in the scroll view
