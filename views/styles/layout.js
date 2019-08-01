@@ -103,17 +103,42 @@ function changeSortMethod(sort)
     xhr.send();
 }
 
+$('#report-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
 
+    var metaid = button.data('metaid');
+    var authorid = button.data('authorid');
 
-function report()
-{
-    const selection = $('input[name="report-radio"]:checked');
-    if (selection.val() == null)
-        return;
-    console.log("Report reason: " + selection.val());
-    $('#report-modal').modal('toggle');
-    selection.prop('checked', false);
-}
+    $('#report-metaphor-button').on('click', function (event) {
+
+        var selection = $('input[name="report-radio"]:checked');
+
+        if (selection.val() == null)
+        {
+            return;
+        }
+
+        const body = "issue=" + selection.val() + "&metaid=" + metaid + "&authorid=" + authorid;
+        const payload = body.replace(/ /g, "+");
+
+        $('#report-modal').modal('toggle');
+    
+        var xhr = new XMLHttpRequest();
+    
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                selection.prop('checked', false);
+                location.reload();
+            }
+        };
+    
+        xhr.open("POST", "/metaphors/report", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(payload);
+    });
+    
+});
 
 function loginMessage()
 {

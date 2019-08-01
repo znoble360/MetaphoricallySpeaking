@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 
 let ReportSchema = new mongoose.Schema( {
     issue: { type: String },
-    metaphor: {type: mongoose.Schema.Types.String, ref: 'Metaphor'},
-    metaphorId: { type: [mongoose.Schema.Types.ObjectId], ref: 'Metaphor' },
-    author: {type: [mongoose.Schema.Types.String], ref: 'User'},
-  
+    metaphorID: { type: [mongoose.Schema.Types.ObjectId], ref: 'Metaphor' },
+    authorID: {type: [mongoose.Schema.Types.ObjectId], ref: 'User'},
+    userID: {type: [mongoose.Schema.Types.ObjectId], ref: 'User'}
   } );
   
   const ReportModel = mongoose.model('Report', ReportSchema);

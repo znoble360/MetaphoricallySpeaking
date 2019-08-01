@@ -28,7 +28,7 @@
                                     <% if (id == null) { %>
                                         <button class="dropdown-item" onclick="loginMessage()">Report</button>
                                     <% } else { %>
-                                        <button class="dropdown-item" data-toggle="modal" data-target="#report-modal">Report</button>
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#report-modal" data-metaid="<%= meta._id %>" data-authorid="<%= meta.authorID %>">Report</button>
                                     <% } %>
                                 <% } %>
                                 <% if (meta.authorID == id) { %>
