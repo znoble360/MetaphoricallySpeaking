@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { ensureAuthenticated } = require('../config/auth');
 
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 //user model
 const User = require('../models/user');
+const Metaphor = require('../models/metaphor');
 
 router.get('/login', (req,res)=>res.render('login', {
     page: "login"
@@ -117,6 +119,40 @@ router.post('/register', (req,res,next)=>{
         });
     
     }
+});
+
+router.put('/edit',(ensureAuthenticated), (req,res) => {
+    const {name, username, email} = req.body;
+
+    console.log(req.user._id);
+    console.log("old name: " + req.user.name);
+    console.log("old username: " + req.user.username);
+    console.log("old email: " + req.user.email);
+    console.log("new name: " + req.body.name);
+    console.log("new username: " + req.body.username);
+    console.log("new email: " + req.body.email);
+
+    User.findOne({email: req.body.email}).then( (user) => {
+        if(user && user.email != req.user.email){
+            //email exists
+            res.send({success: false, error: "Email"});
+        } else {
+            User.findOne({username: req.body.username}).then( (user) => {
+                if(user && user.username != req.user.username){
+                    //username exists
+                    res.send({success: false, error: "Username"});
+                } else {
+                    User.updateOne({_id: req.user._id}, {name: req.body.name, username: req.body.username, email: req.body.email}, (error) => {
+                        if (error) {
+                            res.send({success: false, error: "Error"});
+                        } else {
+                            res.send({success: true, error: ""});
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
 
 //Login handle

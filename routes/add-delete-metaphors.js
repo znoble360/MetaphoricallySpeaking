@@ -30,7 +30,6 @@ router.post('/add', (req,res,next)=>{
     	  text: req.body.text,
         explanation: req.body.explanation,
         authorID: req.user._id,
-        author: req.user.username,
         likeCount: 0,
         dislikeCount: 0
     });

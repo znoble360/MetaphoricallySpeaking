@@ -103,17 +103,42 @@ function changeSortMethod(sort)
     xhr.send();
 }
 
+$('#report-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
 
+    var metaid = button.data('metaid');
+    var authorid = button.data('authorid');
 
-function report()
-{
-    const selection = $('input[name="report-radio"]:checked');
-    if (selection.val() == null)
-        return;
-    console.log("Report reason: " + selection.val());
-    $('#report-modal').modal('toggle');
-    selection.prop('checked', false);
-}
+    $('#report-metaphor-button').on('click', function (event) {
+
+        var selection = $('input[name="report-radio"]:checked');
+
+        if (selection.val() == null)
+        {
+            return;
+        }
+
+        const body = "issue=" + selection.val() + "&metaid=" + metaid + "&authorid=" + authorid;
+        const payload = body.replace(/ /g, "+");
+
+        $('#report-modal').modal('toggle');
+    
+        var xhr = new XMLHttpRequest();
+    
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(xhr.responseText);
+                selection.prop('checked', false);
+                location.reload();
+            }
+        };
+    
+        xhr.open("POST", "/metaphors/report", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(payload);
+    });
+    
+});
 
 function loginMessage()
 {
@@ -186,6 +211,144 @@ $('#delete-modal').on('show.bs.modal', function (event) {
         xhr.open("DELETE", "/metaphors/delete/" + metaid, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send();
+    });
+    
+});
+
+$('#settings-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+
+    // Extract info from data-* attributes
+    var name = button.data('name');
+    var username = button.data('username');
+    var email = button.data('email');
+
+    var modal = $(this);
+
+    var nameField = modal.find('#name-field');
+    var usernameField = modal.find('#username-field');
+    var emailField = modal.find('#email-field');
+
+    var saveBtn = modal.find('#save-settings-button');
+    var cancelBtn = modal.find('#cancel-edit-button');
+    var closeBtn = modal.find('#close-settings-button');
+    var editBtn = modal.find('#edit-settings-button');
+    var XBtn = modal.find('#x-settings-button');
+
+    saveBtn.hide();
+    cancelBtn.hide();
+
+    nameField.val(name);
+    usernameField.val(username);
+    emailField.val(email);
+
+    closeBtn.on('click', function(event) {
+        location.reload();
+    });
+
+    XBtn.on('click', function(event) {
+        if (saveBtn.is(":visible")) {
+            saveBtn.hide();
+        }
+        if (cancelBtn.is(":visible")) {
+            cancelBtn.hide();
+        }
+        if (editBtn.is(":hidden")) {
+            editBtn.show();
+        }
+        if (closeBtn.is(":hidden")) {
+            closeBtn.show();
+        }
+        if (!nameField.attr('disabled')) {
+            nameField.attr({'disabled': 'disabled'});
+        }
+        if (!usernameField.attr('disabled')) {
+            usernameField.attr({'disabled': 'disabled'});
+        }
+        if (!emailField.attr('disabled')) {
+            emailField.attr({'disabled': 'disabled'});
+        }
+
+        $('#settings-warning-text').html("");
+        $('#settings-success-text').html("");
+
+        modal.modal('toggle');
+
+        location.reload();
+    });
+
+    editBtn.on('click', function (event) {
+        nameField.removeAttr('disabled');
+        usernameField.removeAttr('disabled');
+        emailField.removeAttr('disabled');
+
+        editBtn.hide();
+        closeBtn.hide();
+        saveBtn.show();
+        cancelBtn.show();
+
+        saveBtn.on('click', function(event) {
+            console.log("name: " + nameField.val());
+            console.log("username: " + usernameField.val());
+            console.log("email: " + emailField.val());
+
+            const body = "name=" + nameField.val() + "&username=" + usernameField.val() + "&email=" + emailField.val();
+            const payload = body.replace(/ /g, "+");
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(xhr.response);
+                    if (!response.success) {
+                        $('#settings-success-text').html("");
+                        if (response.error != "Error")
+                            $('#settings-warning-text').html(response.error + ' already in use');
+                        else
+                            $('#settings-warning-text').html(response.error);
+                    } else {
+                        $('#settings-warning-text').html("");
+                        $('#settings-success-text').html("Changes saved");
+
+                        nameField.attr({'disabled': 'disabled'});
+                        usernameField.attr({'disabled': 'disabled'});
+                        emailField.attr({'disabled': 'disabled'});
+
+
+                        saveBtn.hide();
+                        cancelBtn.hide();
+                        closeBtn.show();
+                        editBtn.show();
+                    }
+                }
+            }
+
+            xhr.open("PUT", "/users/edit", true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(payload);
+        });
+
+        cancelBtn.on('click', function(event) {
+            saveBtn.hide();
+            cancelBtn.hide();
+            closeBtn.show();
+            editBtn.show();
+
+            nameField.val(name);
+            usernameField.val(username);
+            emailField.val(email);
+
+            nameField.attr({'disabled': 'disabled'});
+            usernameField.attr({'disabled': 'disabled'});
+            emailField.attr({'disabled': 'disabled'});
+
+            $('#settings-warning-text').html("");
+            $('#settings-success-text').html("");
+        });
+
+        
+    
+        
     });
     
 });

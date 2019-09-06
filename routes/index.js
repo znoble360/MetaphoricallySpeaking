@@ -3,7 +3,6 @@ const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
 const User = require('../models/user');
-const mongoose = require('mongoose');
 
 const sortByNew = {time : -1};
 const sortByLikes = {likeCount : -1};
@@ -20,41 +19,69 @@ const getMetaphors = function(query, sort) {
     });
 }
 
+const getAuthor = function(authorID) {
+    return new Promise(function(resolve, reject) {
+        User.findOne({_id: authorID}).then(function(user) {
+            if (user) {
+                resolve(user);
+            } else {
+
+            }
+        });
+    });
+}
+
 const setClasses = function(metaphors, id) {
-    metaphors.forEach( (meta) => {
-        if (meta.likedBy.includes(id)) {
-            meta.class = "metaphor-liked";
-        } else if (meta.dislikedBy.includes(id)) {
-            meta.class = "metaphor-disliked";
-        } else {
-            meta.class = "metaphor-default";
-        }
+    return new Promise(function(resolve, reject) {
+        if (metaphors.length == 0)
+            resolve();
+            
+        var i = 0;
 
-        var timeElapsed = Date.now() - meta.time.getTime();
-        var seconds = Math.floor(timeElapsed/1000);
-        var minutes = Math.floor(timeElapsed/60000);
-        var hours = Math.floor(timeElapsed/3600000);
-        var days = Math.floor(timeElapsed/86400000);
-        var weeks = Math.floor(timeElapsed/604800000);
-        var months = Math.floor(timeElapsed/2592000000);
-        var years = Math.floor(timeElapsed/31536000000);
+        metaphors.forEach( (meta) => {
+            getAuthor(meta.authorID).then(function(user){
+                i++;
+                meta.author = user.username;
+                meta.class = "";
 
-        if (seconds < 1)
-            meta.timestring = "Now";
-        else if (seconds < 60)
-            meta.timestring = seconds + "s";
-        else if (minutes < 60)
-            meta.timestring = minutes + "m";
-        else if (hours < 24)
-            meta.timestring = hours + "h";
-        else if (days < 7)
-            meta.timestring = days + "d";
-        else if (days < 30)
-            meta.timestring = weeks + "w";
-        else if (days < 365)
-            meta.timestring = months + " month" + (months == 1 ? "" : "s");
-        else
-            meta.timestring = years + " year";
+                if (meta.likedBy.includes(id)) {
+                    meta.class = "metaphor-liked";
+                } else if (meta.dislikedBy.includes(id)) {
+                    meta.class = "metaphor-disliked";
+                } else {
+                    meta.class = "metaphor-default";
+                }
+            
+                var timeElapsed = Date.now() - meta.time.getTime();
+                var seconds = Math.floor(timeElapsed/1000);
+                var minutes = Math.floor(timeElapsed/60000);
+                var hours = Math.floor(timeElapsed/3600000);
+                var days = Math.floor(timeElapsed/86400000);
+                var weeks = Math.floor(timeElapsed/604800000);
+                var months = Math.floor(timeElapsed/2592000000);
+                var years = Math.floor(timeElapsed/31536000000);
+        
+                if (seconds < 1)
+                    meta.timestring = "Now";
+                else if (seconds < 60)
+                    meta.timestring = seconds + "s";
+                else if (minutes < 60)
+                    meta.timestring = minutes + "m";
+                else if (hours < 24)
+                    meta.timestring = hours + "h";
+                else if (days < 7)
+                    meta.timestring = days + "d";
+                else if (days < 30)
+                    meta.timestring = weeks + "w";
+                else if (days < 365)
+                    meta.timestring = months + " month" + (months == 1 ? "" : "s");
+                else
+                    meta.timestring = years + " year";
+
+                if (i == metaphors.length)
+                    resolve();
+            });   
+        });
     });
 }
 
@@ -95,15 +122,16 @@ router.get('/', (req,res)=> {
     }
 
     getMetaphors(null, method).then(function(metaphors) {
-        setClasses(metaphors, null);
-        res.render("welcome", {
-            page: "welcome",
-            id: null,
-            name: null,
-            username: null,
-            email: null,
-            metaphor: metaphors,
-            sortmethod: sort
+        setClasses(metaphors, null).then(function(){
+            res.render("welcome", {
+                page: "welcome",
+                id: null,
+                name: null,
+                username: null,
+                email: null,
+                metaphor: metaphors,
+                sortmethod: sort
+            });
         });
     });
 });
@@ -142,15 +170,16 @@ router.get('/dashboard',(ensureAuthenticated), (req,res)=> {
     }
 
     getMetaphors(null, method).then(function(metaphors) {
-        setClasses(metaphors, req.user._id);
-        res.render("dashboard", {
-            page: "dashboard",
-            name: req.user.name,
-            username: req.user.username,
-            id: req.user._id.toHexString(),
-            email: req.user.email,
-            metaphor: metaphors,
-            sortmethod: sort
+        setClasses(metaphors, req.user._id).then(function(){
+            res.render("dashboard", {
+                page: "dashboard",
+                name: req.user.name,
+                username: req.user.username,
+                id: req.user._id.toHexString(),
+                email: req.user.email,
+                metaphor: metaphors,
+                sortmethod: sort
+            });
         });
     });  
 });
@@ -174,16 +203,17 @@ router.get('/myprofile', (ensureAuthenticated), (req,res)=> {
     }
     
     getMetaphors({authorID: req.user._id}, method).then(function(metaphors) {
-        setClasses(metaphors, req.user._id);
-        res.render("myprofile", {
-            page: "myprofile",
-            name: req.user.name,
-            username: req.user.username,
-            id: req.user._id.toHexString(),
-            email: req.user.email,
-            metaphor: metaphors,
-            display: "posts",
-            sortmethod: sort
+        setClasses(metaphors, req.user._id).then(function(){
+            res.render("myprofile", {
+                page: "myprofile",
+                name: req.user.name,
+                username: req.user.username,
+                id: req.user._id.toHexString(),
+                email: req.user.email,
+                metaphor: metaphors,
+                display: "posts",
+                sortmethod: sort
+            });
         });
     });
 });
@@ -207,16 +237,17 @@ router.get('/myprofile/likes', (ensureAuthenticated), (req,res)=> {
     }
     
     getMetaphors({likedBy: req.user._id}, method).then(function(metaphors) {
-        setClasses(metaphors, req.user._id);
-        res.render("myprofile", {
-            page: "myprofilelikes",
-            name: req.user.name,
-            username: req.user.username,
-            id: req.user._id.toHexString(),
-            email: req.user.email,
-            metaphor: metaphors,
-            display: "likes",
-            sortmethod: sort
+        setClasses(metaphors, req.user._id).then(function(){
+            res.render("myprofile", {
+                page: "myprofilelikes",
+                name: req.user.name,
+                username: req.user.username,
+                id: req.user._id.toHexString(),
+                email: req.user.email,
+                metaphor: metaphors,
+                display: "likes",
+                sortmethod: sort
+            });
         });
     });
 });
@@ -252,45 +283,46 @@ router.get('/user/:username', (req,res)=> {
     getUser(username).then(function(user){
         getMetaphors({authorID: user._id}, method).then(function(metaphors) {
             if (req.isAuthenticated()) {
-                setClasses(metaphors, req.user._id);
-                res.render("user", {
-                    page: "user",
-    
-                    name: req.user.name,
-                    username: req.user.username,
-                    id: req.user._id.toHexString(),
-                    email: req.user.email,
-    
-                    user_name: user.name,
-                    user_username: user.username,
-                    user_id: user._id.toHexString(),
-                    user_email: user.email,
-    
-                    metaphor: metaphors,
-                    display: "posts",
-                    sortmethod: sort
+                setClasses(metaphors, req.user._id).then(function(){
+                    res.render("user", {
+                        page: "user",
+        
+                        name: req.user.name,
+                        username: req.user.username,
+                        id: req.user._id.toHexString(),
+                        email: req.user.email,
+        
+                        user_name: user.name,
+                        user_username: user.username,
+                        user_id: user._id.toHexString(),
+                        user_email: user.email,
+        
+                        metaphor: metaphors,
+                        display: "posts",
+                        sortmethod: sort
+                    });
                 });
             } else {
-                setClasses(metaphors, null);
-                res.render("user", {
-                    page: "user",
-
-                    name: null,
-                    username: null,
-                    id: null,
-                    email: null,
-
-                    user_name: user.name,
-                    user_username: user.username,
-                    user_id: user._id.toHexString(),
-                    user_email: user.email,
-
-                    metaphor: metaphors,
-                    display: "posts",
-                    sortmethod: sort
+                setClasses(metaphors, null).then(function(){
+                    res.render("user", {
+                        page: "user",
+    
+                        name: null,
+                        username: null,
+                        id: null,
+                        email: null,
+    
+                        user_name: user.name,
+                        user_username: user.username,
+                        user_id: user._id.toHexString(),
+                        user_email: user.email,
+    
+                        metaphor: metaphors,
+                        display: "posts",
+                        sortmethod: sort
+                    });
                 });
-            }
-            
+            }         
         });
     });
     
@@ -327,45 +359,46 @@ router.get('/user/:username/likes', (req,res)=> {
     getUser(username).then(function(user){
         getMetaphors({likedBy: user._id}, method).then(function(metaphors) {
             if (req.isAuthenticated()) {
-                setClasses(metaphors, req.user._id);
-                res.render("user", {
-                    page: "userlikes",
-    
-                    name: req.user.name,
-                    username: req.user.username,
-                    id: req.user._id.toHexString(),
-                    email: req.user.email,
-    
-                    user_name: user.name,
-                    user_username: user.username,
-                    user_id: user._id.toHexString(),
-                    user_email: user.email,
-    
-                    metaphor: metaphors,
-                    display: "likes",
-                    sortmethod: sort
+                setClasses(metaphors, req.user._id).then(function(){
+                    res.render("user", {
+                        page: "userlikes",
+        
+                        name: req.user.name,
+                        username: req.user.username,
+                        id: req.user._id.toHexString(),
+                        email: req.user.email,
+        
+                        user_name: user.name,
+                        user_username: user.username,
+                        user_id: user._id.toHexString(),
+                        user_email: user.email,
+        
+                        metaphor: metaphors,
+                        display: "likes",
+                        sortmethod: sort
+                    });
                 });
             } else {
-                setClasses(metaphors, null);
-                res.render("user", {
-                    page: "userlikes",
-
-                    name: null,
-                    username: null,
-                    id: null,
-                    email: null,
-
-                    user_name: user.name,
-                    user_username: user.username,
-                    user_id: user._id.toHexString(),
-                    user_email: user.email,
-
-                    metaphor: metaphors,
-                    display: "likes",
-                    sortmethod: sort
+                setClasses(metaphors, null).then(function(){
+                    res.render("user", {
+                        page: "userlikes",
+    
+                        name: null,
+                        username: null,
+                        id: null,
+                        email: null,
+    
+                        user_name: user.name,
+                        user_username: user.username,
+                        user_id: user._id.toHexString(),
+                        user_email: user.email,
+    
+                        metaphor: metaphors,
+                        display: "likes",
+                        sortmethod: sort
+                    });
                 });
             }
-            
         });
     });
     

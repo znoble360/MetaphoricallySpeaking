@@ -3,6 +3,11 @@ body
     padding-top: 13vh;
 }
 
+.close:focus
+{
+    outline: none;
+}
+
 .scrollbar 
 {
     display: block;

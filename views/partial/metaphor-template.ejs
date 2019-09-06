@@ -28,11 +28,11 @@
                                     <% if (id == null) { %>
                                         <button class="dropdown-item" onclick="loginMessage()">Report</button>
                                     <% } else { %>
-                                        <button class="dropdown-item" data-toggle="modal" data-target="#report-modal">Report</button>
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#report-modal" data-metaid="<%= meta._id %>" data-authorid="<%= meta.authorID %>">Report</button>
                                     <% } %>
                                 <% } %>
                                 <% if (meta.authorID == id) { %>
-                                    <button class="dropdown-item" data-toggle="modal" data-target="#edit-modal" data-text="<%= meta.text %>" data-explanation="<%= meta.explanation %>" data-metaid="<%= meta._id %>">Edit</button>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#edit-modal" data-backdrop="static" data-keyboard="false" data-text="<%= meta.text %>" data-explanation="<%= meta.explanation %>" data-metaid="<%= meta._id %>">Edit</button>
                                     <button class="dropdown-item" data-toggle="modal" data-target="#delete-modal" data-metaid="<%= meta._id %>">Delete</button>
                                 <% } %>
                             </div>
