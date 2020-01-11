@@ -1,0 +1,13 @@
+<% if(reports.length == 0) { %>
+    No reports available.
+<% } %>
+<div class="container">
+    <% reports.forEach( (report) => { %>
+        <div class="row">
+            <p>Issue: <%=report.issue%><br>
+            Metahpor ID: <%=report.metaphorID%><br>
+            AuthorID: <%=report.authorID%><br>
+            UserID: <%=report.userID%></p>
+        </div>
+    <% }); %>
+</div>

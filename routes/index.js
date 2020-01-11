@@ -3,6 +3,7 @@ const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Metaphor = require('../models/metaphor');
 const User = require('../models/user');
+const Report = require('../models/reports');
 
 const sortByNew = {time : -1};
 const sortByLikes = {likeCount : -1};
@@ -407,6 +408,14 @@ router.get('/user/:username/likes', (req,res)=> {
 router.put('/sort/:sortmethod', (req,res) => {
     sortmethod = req.params.sortmethod;
     res.send("Sort method updated to " + sortmethod);
+});
+
+router.get('/reportpage', (req, res) => {
+    Report.find().then(function(reports) {
+        res.render("reportpage", {
+            reports: reports
+        });
+    });
 });
 
 
