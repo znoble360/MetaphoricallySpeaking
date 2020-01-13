@@ -41,7 +41,8 @@ body
 
 .full-page
 {
-    height: 74vh;
+    /*height: 74vh;*/
+    height: auto;
 }
 
 .fake-a-tag
