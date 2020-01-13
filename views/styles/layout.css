@@ -106,7 +106,7 @@ body
 .metaphor-footer
 {
     height: 44px;
-    color: aquamarine;
+    background-color: plum;
 }
 
 .btn-metaphor-menu
@@ -117,6 +117,7 @@ body
     background: none;
     background-size: 100%;
     background-image: url(../images/more-options-gray.png);
+
 }
 
 
