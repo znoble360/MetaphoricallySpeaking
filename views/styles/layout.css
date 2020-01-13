@@ -41,8 +41,8 @@ body
 
 .full-page
 {
-    /*height: 74vh;*/
-    height: auto;
+    height: 74vh;
+ 
 }
 
 .fake-a-tag
@@ -114,9 +114,10 @@ body
 {
     width: 20px;
     height: 20px;
-    border: 0;
+    border: 2px;
     background: none;
-    background-size: 100%;
+    /*background-size: 100%;*/
+    background-size: 80%;
     background-image: url(../images/more-options-gray.png);
 
 }
