@@ -33,7 +33,8 @@ body
 .profile-bar
 {
     height: 9vh;
-    background-color: plum;
+   /* background-color: plum;*/
+   background-color: #8076a3;
 }
 
 .full-browser
@@ -44,7 +45,7 @@ body
 .full-page
 {
     height: 74vh;
-    background-color: #8076a3;
+    
  
 }
 
