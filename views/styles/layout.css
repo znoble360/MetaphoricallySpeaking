@@ -1,0 +1,140 @@
+
+
+body
+{
+    padding-top: 13vh;
+    
+}
+
+.close:focus
+{
+    outline: none;
+}
+
+.scrollbar 
+{
+    display: block;
+    overflow: overlay;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.scrollbar::-webkit-scrollbar
+{
+    width:5px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #A991D4 !important;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+}
+
+.profile-bar
+{
+    height: 9vh;
+   /* background-color: plum;*/
+   background-color: #d42eb3d8;
+}
+
+.full-browser
+{
+    height: 86vh;
+}
+
+.full-page
+{
+    height: 74vh;
+    
+ 
+}
+
+.fake-a-tag
+{
+    background: none;
+    border: none;
+}
+
+.fake-a-tag:hover
+{
+    text-decoration: underline;
+}
+.fake-a-tag:focus
+{
+    outline: none;
+}
+
+.btn-vote
+{
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background: none;
+    background-size: 100%;
+}
+
+.btn-vote:focus
+{
+    outline: none;
+}
+
+.metaphor-default .btn-like
+{
+    background-image: url(../images/upvote-default.png);
+}
+
+.metaphor-default .btn-dislike
+{
+    background-image: url(../images/downvote-default.png);
+}
+
+.metaphor-liked .btn-like
+{
+    background-image: url(../images/upvote-selected.png);
+}
+
+.metaphor-liked .btn-dislike
+{
+    background-image: url(../images/downvote-default.png);
+}
+
+.metaphor-disliked .btn-like
+{
+    background-image: url(../images/upvote-default.png);
+}
+
+.metaphor-disliked .btn-dislike
+{
+    background-image: url(../images/downvote-selected.png);
+}
+
+.metaphor-footer
+{
+    height: 44px;
+   
+}
+
+.btn-metaphor-menu
+{
+    width: 20px;
+    height: 20px;
+    border: 2px;
+    background: none;
+    /*background-size: 100%;*/
+    background-size: 80%;
+    background-image: url(../images/more-options-gray.png);
+
+}
+
+
+.btn-metaphor-menu:focus
+{
+    outline: none;
+}
+
+.new-metaphor-textarea
+{
+    resize: none;
+    border-radius: 5px;
+}
+

@@ -1,0 +1,68 @@
+<% if (metaphor.length <= 0) { %>
+    <h4 class="text-center">Looks like there are no posts yet :(</h2>
+<% } %>
+
+
+<% metaphor.forEach((meta)=>{ %>
+    <% if (typeof meta.likeCount == 'undefined') {
+        meta.likeCount = 0;
+    };
+    if (typeof meta.dislikeCount == 'undefined') {
+        meta.dislikeCount = 0;
+    }; %>
+    <div class="<%= meta.class %>" id="<%= meta._id %>">
+        <div class="card mb-5">
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-11">
+                        <h3 class="card-title text-left">"<%= meta.text %>"</h3>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="dropdown">
+                            <button type="button" class="btn-metaphor-menu" data-toggle="dropdown">
+                            </button>
+                            <div class="dropdown-menu p-0">
+                                <% if (meta.authorID != id) { %>
+                                    <% if (id == null) { %>
+                                        <button class="dropdown-item" onclick="loginMessage()">Report</button>
+                                    <% } else { %>
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#report-modal" data-metaid="<%= meta._id %>" data-authorid="<%= meta.authorID %>">Report</button>
+                                    <% } %>
+                                <% } %>
+                                <% if (meta.authorID == id) { %>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#edit-modal" data-backdrop="static" data-keyboard="false" data-text="<%= meta.text %>" data-explanation="<%= meta.explanation %>" data-metaid="<%= meta._id %>">Edit</button>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#delete-modal" data-metaid="<%= meta._id %>">Delete</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <p class="card-text text-left"><%= meta.explanation %></p>
+
+            </div>
+            <div class="card-footer d-flex metaphor-footer">
+                <span class="text-muted mr-auto d-flex">
+                    <% if (id == null) { %>
+                        <button class="btn-vote btn-like px-0" onclick="loginMessage();"></button>
+                        <p class="like-count"><%= meta.likeCount %></p>
+                        <button class="btn-vote btn-dislike px-0 ml-2" onclick="loginMessage();"></button>
+                        <p class="dislike-count"><%= meta.dislikeCount %></p>
+                    <% } %>
+                    <% if (id != null) { %>
+                        <button class="btn-vote btn-like btn-vote-allow px-0" onclick="voteRequest('<%=meta._id%>','<%=id%>', 'like')"></button>
+                        <p class="like-count"><%= meta.likeCount.toString() %></p>
+                        <button class="btn-vote btn-dislike btn-vote-allow px-0 ml-2" onclick="voteRequest('<%=meta._id%>','<%=id%>', 'dislike')"></button>
+                        <p class="dislike-count"><%= meta.dislikeCount.toString() %></p>
+                    <% } %>
+                </span>
+                <span class="text-muted ml-auto"><%= meta.timestring %> &sdot; <button class="user-page-button px-0 text-primary fake-a-tag" data-author="<%= meta.author %>"><%= meta.author %></button></span>
+            </div>
+        </div>
+    </div>
+<% }); %>
+

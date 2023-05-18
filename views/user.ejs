@@ -1,0 +1,39 @@
+<% include ./partial/navbar %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">    
+        </div>
+        <div class="col-md-8">     
+            <div class="container mb-4 profile-bar">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <span class="navbar-brand"><%= user_username %></span>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <% if (display == "posts") { %>
+                                <a class="nav-item nav-link active" href="/user/<%=user_username%>">Posts</a>
+                                <a class="nav-item nav-link" href="/user/<%=user_username%>/likes">Likes</a>
+                            <% } %>
+                            <% if (display == "likes") { %>
+                                <a class="nav-item nav-link" href="/user/<%=user_username%>">Posts</a>
+                                <a class="nav-item nav-link active" href="/user/<%=user_username%>/likes">Likes</a>
+                            <% } %>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <div id="metaphor-container" class="full-page scrollbar">
+                <% include ./partial/messages %>
+                <% include ./partial/metaphor-template %>
+            </div>
+
+        </div>
+        <div class="col-md-2">
+            <% include ./partial/sort-dropdown %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="dropdown d-flex" style="position: fixed;">
+        <p class="my-auto text-primary mr-2">Sort</p>
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+            <%= sortmethod %>
+        </button>
+        <div class="dropdown-menu">
+            <% if (sortmethod == "Most Liked") { %>
+                <% if (page == "searchresults") { %>
+                    <button class="dropdown-item" onclick="changeSearchSort('Newest');">Newest</button>
+                <% } else { %>
+                    <button class="dropdown-item" onclick="changeSortMethod('Newest');">Newest</button>
+                <% } %>
+            <% } %>
+            <% if (sortmethod == "Newest") { %>
+                <% if (page == "searchresults") { %>
+                    <button class="dropdown-item" onclick="changeSearchSort('Most Liked');">Most Liked</button>
+                <% } else { %>
+                    <button class="dropdown-item" onclick="changeSortMethod('Most Liked');">Most Liked</button>
+                <% } %>
+            <% } %>
+        </div>
+</div>

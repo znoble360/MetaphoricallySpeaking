@@ -1,0 +1,30 @@
+<div class="modal fade" id="new-metaphor-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-primary">New Metaphor</h3>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="col-form-label"><h4>Metaphor</h4></label>
+                        <textarea class="md-textarea form-control new-metaphor-textarea" rows="3" id="text" name="text" placeholder="Enter Metaphor"></textarea>
+                    </div>
+                          
+                    <div class="form-group">
+                        <label class="col-form-label" for="explanation"><h4>Explanation</h4></label>
+                        <textarea class="md-textarea form-control new-metaphor-textarea" rows="3" id="explanation" name ="explanation" placeholder="Enter explanation"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="postMetaphor();">Post</button>
+            </div>
+        </div>  
+    </div>
+</div>
+
